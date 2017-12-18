@@ -1,0 +1,96 @@
+<%--
+ * header.jsp
+ *
+ * Copyright (C) 2017 Universidad de Sevilla
+ * 
+ * The use of this project is hereby constrained to the conditions of the 
+ * TDG Licence, a copy of which you may download from 
+ * http://www.tdg-seville.info/License.html
+ --%>
+
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
+
+<div>
+	<img src="images/logo.png" alt="Acme-Work-Pad Co., Inc." />
+</div>
+
+<div>
+	<ul id="jMenu">
+		<!-- Do not forget the "fNiv" class for the first level links !! -->
+
+		<li><a class="fNiv" href="subject/list.do"><spring:message
+					code="master.page.listSubject" /></a></li>
+		<li><a class="fNiv" href="subject/searchSeats.do"><spring:message
+					code="master.page.searchSubject" /></a></li>
+		<li><a class="fNiv" href="teacher/list.do"><spring:message
+					code="master.page.listTeacher" /></a></li>
+		<li><a class="fNiv" href="seminary/list.do"><spring:message
+					code="master.page.listSeminary" /></a></li>
+
+
+		<security:authorize access="hasRole('ADMIN')">
+			<li><a class="fNiv" href="actor/registerTeacher.do"><spring:message
+						code="master.page.register.registerTeacher" /></a></li>
+			<li><a class="fNiv" href="dashboard/list.do"><spring:message
+						code="master.page.dashboard" /></a></li>
+			<li><a href="configurationSystem/edit.do"><spring:message
+						code="configurationSystem" /></a></li>
+		</security:authorize>
+
+		<security:authorize access="hasRole('TEACHER')">
+			<li><a class="fNiv" href="seminary/myList.do"><spring:message
+						code="master.page.seminary.myList" /></a></li>
+			<li><a class="fNiv" href="deliverable/teacher/list.do"><spring:message
+						code="master.page.deliverable.list" /></a></li>
+		</security:authorize>
+
+		<security:authorize access="hasRole('CUSTOMER')">
+			<li><a class="fNiv"><spring:message
+						code="master.page.customer" /></a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="customer/action-1.do"><spring:message
+								code="master.page.customer.action.1" /></a></li>
+					<li><a href="customer/action-2.do"><spring:message
+								code="master.page.customer.action.2" /></a></li>
+				</ul></li>
+		</security:authorize>
+
+		<security:authorize access="isAnonymous()">
+			<li><a class="fNiv" href="security/login.do"><spring:message
+						code="master.page.login" /></a></li>
+			<li><a class="fNiv" href="actor/registerStudent.do"><spring:message
+						code="master.page.register.registerStudent" /></a></li>
+		</security:authorize>
+
+		<security:authorize access="isAuthenticated()"> 
+			<li><a class="fNiv" href="activityRecord/myList.do"><spring:message
+						code="master.page.activityRecord.myList" /></a></li>   
+			<li><a class="fNiv"> <spring:message
+						code="master.page.profile" /> (<security:authentication
+						property="principal.username" />)
+			</a>
+				<ul>
+					<li class="arrow"></li>
+					<li><a href="folder/actor/list.do"><spring:message
+								code="master.page.mailbox" /></a></li>
+					<li><a href="actor/seeProfile.do"><spring:message
+								code="master.page.actor.profile" /></a></li>
+					<li><a href="socialIdentity/list.do"><spring:message
+								code="master.page.socialIdentity" /></a></li>
+					<li><a href="j_spring_security_logout"><spring:message
+								code="master.page.logout" /> </a></li>
+				</ul></li>
+		</security:authorize>
+	</ul>
+</div>
+
+<div>
+	<a href="?language=en">en</a> | <a href="?language=es">es</a>
+</div>
+

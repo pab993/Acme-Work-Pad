@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+      
+<tiles-definitions>
+	
+	<definition name="seminary/myList" extends="master.page">	
+		<put-attribute name="title" value="Mis Seminarios" />
+		<put-attribute name="body" value="/views/seminary/myList.jsp" />
+	</definition>
+	
+		<definition name="seminary/edit" extends="master.page">	
+		<put-attribute name="title" value="Formulario de Seminario" />
+		<put-attribute name="body" value="/views/seminary/edit.jsp" />
+	</definition>
+	
+	<definition name="seminary/list" extends="master.page">	
+		<put-attribute name="title" value="Lista de Seminarios" />
+		<put-attribute name="body" value="/views/seminary/list.jsp" />
+	</definition>
+	
+	
+</tiles-definitions>

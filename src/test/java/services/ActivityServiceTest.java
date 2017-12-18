@@ -1,0 +1,202 @@
+
+package services;
+
+import java.util.Date;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import utilities.AbstractTest;
+import domain.Activity;
+import domain.Subject;
+
+@Transactional
+@ContextConfiguration(locations = {
+	"classpath:spring/junit.xml"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class ActivityServiceTest extends AbstractTest {
+
+	// The SUT
+	// ====================================================
+
+	@Autowired
+	private ActivityService	activityService;
+
+	@Autowired
+	private SubjectService	subjectService;
+
+
+	// Tests
+	// ====================================================
+
+	/*
+	 * Create a new activity.
+	 * 
+	 * En este caso de uso un teacher puede crear un activity.
+	 */
+
+	public void activityCreateTest(final int subjectId, final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			final Subject subject = this.subjectService.findOne(subjectId);
+
+			final Activity result = this.activityService.create(subject);
+
+			final Date startDate = new Date();
+			final Date finishDate = new Date();
+			finishDate.setYear(2018);
+
+			result.setTitle(title);
+			result.setDescription("description");
+			result.setStartDate(startDate);
+			result.setEndDate(finishDate);
+			result.setSubject(subject);
+
+			this.activityService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	/*
+	 * Edit a new activity.
+	 * 
+	 * En este caso de uso un teacher puede editar un activity existente.
+	 */
+
+	public void editActivityTest(final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			Activity result;
+
+			result = this.activityService.findOne(23);
+
+			result.setTitle(title);
+
+			this.activityService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	/*
+	 * Delete a activity.
+	 * 
+	 * En este caso de uso un teacher puede borrar un activity existente.
+	 */
+
+	public void deleteActivityTest(final String username, final int activityId, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			final Activity activity = this.activityService.findOne(activityId);
+
+			this.authenticate(username);
+
+			this.activityService.delete(activity);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	// Drivers
+	// ===================================================
+
+	@Test
+	public void driverActivityCreateTest() {
+
+		final Object testingData[][] = {
+			// Crear una actividad estando logueado como teacher -> true
+			{
+				17, "teacher1", "actividad de matematicas", null
+			},
+			// Crear una activity sin estar logueado --> false
+			{
+				17, null, "actividad de sociales", IllegalArgumentException.class
+			},
+			// Crear una actividad logueado como student-> false
+			{
+				17, "student1", "actividad de matematicas", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.activityCreateTest((int) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+
+	}
+
+	@Test
+	public void driverEditActivityTest() {
+
+		final Object testingData[][] = {
+			// Editar una activity estando logueado como el teacher que imparte su asignatura correspondiente -> true
+			{
+				"teacher1", "actividad prueba", null
+			},
+			// Editar un activity sin estar logueado -> false
+			{
+				null, "actividad prueba", IllegalArgumentException.class
+			},
+			// Editar un activity logueado como student -> false
+			{
+				"student1", " actividad prueba", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.editActivityTest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+	@Test
+	public void driverDeleteActivityTest() {
+
+		final Object testingData[][] = {
+			// Borrar una actividad estando logueado como teacher -> true
+			{
+				"teacher1", 23, null
+			},
+			// Borrar una actividad sin estar logueado -> false
+			{
+				null, 23, IllegalArgumentException.class
+			},
+			// Borrar una actividad estando logueado como student -> false
+			{
+				"student1", 23, IllegalArgumentException.class
+			},
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteActivityTest((String) testingData[i][0], (int) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+}

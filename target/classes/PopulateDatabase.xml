@@ -1,0 +1,1360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- * PopulateDatabase.xml * * Copyright (C) 2017 Universidad de Sevilla 
+	* * The use of this project is hereby constrained to the conditions of the 
+	* TDG Licence, a copy of which you may download from * http://www.tdg-seville.info/License.html -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	">
+
+	<!-- User accounts -->
+
+	<bean id="userAccount1" class="security.UserAccount">
+		<property name="username" value="admin" />
+		<property name="password" value="21232f297a57a5a743894a0e4a801fc3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount2" class="security.UserAccount">
+		<property name="username" value="customer" />
+		<property name="password" value="91ec1f9324753048c0096d036a694f86" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount3" class="security.UserAccount">
+		<property name="username" value="super" />
+		<property name="password" value="1b3231655cebb7a1f783eddf27d254ca" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="ADMIN" />
+				</bean>
+				<bean class="security.Authority">
+					<property name="authority" value="CUSTOMER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount4" class="security.UserAccount">
+		<property name="username" value="student1" />
+		<property name="password" value="5e5545d38a68148a2d5bd5ec9a89e327" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="STUDENT" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount5" class="security.UserAccount">
+		<property name="username" value="student2" />
+		<property name="password" value="213ee683360d88249109c2f92789dbc3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="STUDENT" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount6" class="security.UserAccount">
+		<property name="username" value="student3" />
+		<property name="password" value="8e4947690532bc44a8e41e9fb365b76a" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="STUDENT" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount7" class="security.UserAccount">
+		<property name="username" value="teacher1" />
+		<property name="password" value="41c8949aa55b8cb5dbec662f34b62df3" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="TEACHER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userAccount8" class="security.UserAccount">
+		<property name="username" value="teacher2" />
+		<property name="password" value="ccffb0bb993eeb79059b31e1611ec353" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="TEACHER" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- Other domain beans come here -->
+
+	<!-- ADMINISTRATORS -->
+	<bean id="admin" class="domain.Administrator">
+		<property name="name" value="NameAdmin" />
+		<property name="surname" value="SurnameAdmin" />
+		<property name="phone" value="+ES647382899" />
+		<property name="email" value="admin@admin.com" />
+		<property name="postalAddress" value="41008" />
+		<property name="userAccount" ref="userAccount1" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox1" />
+				<ref bean="outbox1" />
+				<ref bean="spambox1" />
+				<ref bean="trashbox1" />
+				<ref bean="folder1" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+				<ref bean="socialIdentity1" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+				<ref bean="subject1" />
+				<ref bean="subject2" />
+				<ref bean="subject3" />
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordBulletin1" />
+				<ref bean="activityRecordSubject1" />
+				<ref bean="activityRecordSubject2" />
+				<ref bean="activityRecordSubject3" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- CUSTOMER -->
+	<bean id="customer" class="domain.Customer">
+		<property name="name" value="NameCustomer" />
+		<property name="surname" value="SurnameAdmin" />
+		<property name="phone" value="+ES647382899" />
+		<property name="email" value="admin@admin.com" />
+		<property name="postalAddress" value="41008" />
+		<property name="userAccount" ref="userAccount2" />
+	</bean>
+
+	<!-- STUDENTS -->
+	<bean id="student1" class="domain.Student">
+		<property name="name" value="NameStudent1" />
+		<property name="surname" value="SurnameStudent1" />
+		<property name="phone" value="+ES647382811" />
+		<property name="email" value="student1@student1.com" />
+		<property name="postalAddress" value="41004" />
+		<property name="userAccount" ref="userAccount4" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox2" />
+				<ref bean="outbox2" />
+				<ref bean="spambox2" />
+				<ref bean="trashbox2" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+				<ref bean="socialIdentity2" />
+				<ref bean="socialIdentity3" />
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordEnrol1Subject1" />
+				<ref bean="activityRecordEnrol1Subject3" />
+				<ref bean="activityRecordDeliverable1" />
+				<ref bean="activityRecordEnrol1Seminary1" />
+				<ref bean="activityRecordEnrol1Seminary2" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+				<ref bean="subject1" />
+				<ref bean="subject3" />
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="student2" class="domain.Student">
+		<property name="name" value="NameStudent2" />
+		<property name="surname" value="SurnameStudent2" />
+		<property name="phone" value="+ES647383311" />
+		<property name="email" value="student2@student2.com" />
+		<property name="postalAddress" value="41044" />
+		<property name="userAccount" ref="userAccount5" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox3" />
+				<ref bean="outbox3" />
+				<ref bean="spambox3" />
+				<ref bean="trashbox3" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordEnrol1Subject2" />
+				<ref bean="activityRecordDeliverable2" />
+				<ref bean="activityRecordEnrol2Seminary1" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+				<ref bean="subject2" />
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="student3" class="domain.Student">
+		<property name="name" value="NameStudent3" />
+		<property name="surname" value="SurnameStudent3" />
+		<property name="phone" value="+ES634382811" />
+		<property name="email" value="student3@student3.com" />
+		<property name="postalAddress" value="41334" />
+		<property name="userAccount" ref="userAccount6" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox4" />
+				<ref bean="outbox4" />
+				<ref bean="spambox4" />
+				<ref bean="trashbox4" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordEnrol2Subject2" />
+				<ref bean="activityRecordEnrol2Subject3" />
+				<ref bean="activityRecordDeliverable3" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+				<ref bean="subject2" />
+				<ref bean="subject3" />
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- TEACHERS -->
+	<bean id="teacher1" class="domain.Teacher">
+		<property name="name" value="NameTeacher1" />
+		<property name="surname" value="SurnameTeacher1" />
+		<property name="phone" value="+ES647382833" />
+		<property name="email" value="teacher1@teacher1.com" />
+		<property name="postalAddress" value="41554" />
+		<property name="userAccount" ref="userAccount7" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox5" />
+				<ref bean="outbox5" />
+				<ref bean="spambox5" />
+				<ref bean="trashbox5" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+				<ref bean="socialIdentity4" />
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordBulletin2" />
+				<ref bean="activityRecordAssignment1" />
+				<ref bean="activityRecordAssignment2" />
+				<ref bean="activityRecordActivity1" />
+				<ref bean="activityRecordActivity2" />
+				<ref bean="activityRecordSeminary1" />
+				<ref bean="activityRecordSeminary2" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+			<ref bean="subject2" />
+			</list>
+		</property>
+		<property name="seminaries">
+			<list>
+				<ref bean="seminary1" />
+				<ref bean="seminary2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="teacher2" class="domain.Teacher">
+		<property name="name" value="NameTeacher2" />
+		<property name="surname" value="SurnameTeacher2" />
+		<property name="phone" value="+ES547382833" />
+		<property name="email" value="teacher2@teacher2.com" />
+		<property name="postalAddress" value="21554" />
+		<property name="userAccount" ref="userAccount8" />
+		<property name="folders">
+			<list>
+				<ref bean="inbox6" />
+				<ref bean="outbox6" />
+				<ref bean="spambox6" />
+				<ref bean="trashbox6" />
+			</list>
+		</property>
+		<property name="socialIdentities">
+			<list>
+			</list>
+		</property>
+		<property name="activityRecords">
+			<list>
+				<ref bean="activityRecordBulletin3" />
+				<ref bean="activityRecordAssignment3" />
+				<ref bean="activityRecordActivity3" />
+				<ref bean="activityRecordSeminary3" />
+			</list>
+		</property>
+		<property name="subjects">
+			<list>
+				<ref bean="subject1" />
+				<ref bean="subject3" />
+			</list>
+		</property>
+		<property name="seminaries">
+			<list>
+				<ref bean="seminary3" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- SUBJECTS -->
+	<bean id="subject1" class="domain.Subject">
+		<property name="title" value="title1" />
+		<property name="ticker" value="aa-12345" />
+		<property name="syllabus" value="syllabus1" />
+		<property name="seats" value="2" />
+		<property name="teacher" ref="teacher2"/>
+		<property name="administrator" ref="admin"/>
+		<property name="bibliographyRecords">
+			<list>
+				<ref bean="bibliographyRecord1" />
+				<ref bean="bibliographyRecord2" />
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+				<ref bean="group1" />
+			</list>
+		</property>
+		<property name="students">
+			<list>
+				<ref bean="student1" />
+			</list>
+		</property>
+		<property name="assignments">
+			<list>
+				<ref bean="assignment1" />
+			</list>
+		</property>
+		<property name="bulletins">
+			<list>
+				<ref bean="bulletin1" />
+				<ref bean="bulletin2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="subject2" class="domain.Subject">
+		<property name="title" value="title2" />
+		<property name="ticker" value="aa-12346" />
+		<property name="syllabus" value="syllabus2" />
+		<property name="seats" value="30" />
+		<property name="teacher" ref="teacher1"/>
+		<property name="administrator" ref="admin"/>
+		<property name="bibliographyRecords">
+			<list>
+				<ref bean="bibliographyRecord3" />
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+				<ref bean="group2" />
+			</list>
+		</property>
+		<property name="students">
+			<list>
+				<ref bean="student2" />
+				<ref bean="student3" />
+			</list>
+		</property>
+		<property name="assignments">
+			<list>
+				<ref bean="assignment2" />
+			</list>
+		</property>
+		<property name="bulletins">
+			<list>
+				<ref bean="bulletin3" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="subject3" class="domain.Subject">
+		<property name="title" value="title3" />
+		<property name="ticker" value="aa-12347" />
+		<property name="syllabus" value="syllabus3" />
+		<property name="seats" value="35" />
+		<property name="teacher" ref="teacher2"/>
+		<property name="administrator" ref="admin"/>
+		<property name="bibliographyRecords">
+			<list>
+			</list>
+		</property>
+		<property name="groups">
+			<list>
+				<ref bean="group3" />
+			</list>
+		</property>
+		<property name="students">
+			<list>
+				<ref bean="student1" />
+				<ref bean="student3" />
+			</list>
+		</property>
+		<property name="assignments">
+			<list>
+				<ref bean="assignment3" />
+			</list>
+		</property>
+		<property name="bulletins">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- ASSIGNMENTS -->
+	<bean id="assignment1" class="domain.Assignment">
+		<property name="title" value="title1" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="01/01/2017 10:00" />
+		<property name="endDate" value="12/06/2019 10:00" />
+		<property name="information" value="http://www.information1.com" />
+		<property name="subject" ref="subject1" />
+		<property name="deliverables">
+			<list>
+				<ref bean="deliverable1" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="assignment2" class="domain.Assignment">
+		<property name="title" value="title2" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="10/11/2018 10:00" />
+		<property name="endDate" value="12/05/2019 10:00" />
+		<property name="information" value="http://www.information2.com" />
+		<property name="subject" ref="subject2" />
+		<property name="deliverables">
+			<list>
+				<!-- <ref bean="deliverable2" /> -->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="assignment3" class="domain.Assignment">
+		<property name="title" value="title3" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="10/10/2018 10:00" />
+		<property name="endDate" value="12/04/2019 10:00" />
+		<property name="information" value="http://www.information3.com" />
+		<property name="subject" ref="subject3" />
+		<property name="deliverables">
+			<list>
+				<ref bean="deliverable3" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- ACTIVITIES -->
+	<bean id="activity1" class="domain.Activity">
+		<property name="title" value="title1" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="10/12/2018" />
+		<property name="endDate" value="12/06/2019" />
+		<property name="information" value="http://www.information1.com" />
+		<property name="subject" ref="subject1" />
+	</bean>
+
+
+	<bean id="activity2" class="domain.Activity">
+		<property name="title" value="title2" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="10/11/2018" />
+		<property name="endDate" value="12/05/2019" />
+		<property name="information" value="http://www.information1.com" />
+		<property name="subject" ref="subject2" />
+	</bean>
+
+
+	<bean id="activity3" class="domain.Activity">
+		<property name="title" value="title3" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="10/10/2018" />
+		<property name="endDate" value="12/04/2019" />
+		<property name="information" value="http://www.information1.com" />
+		<property name="subject" ref="subject3" />
+	</bean>
+
+
+	<!-- BIBLIOGRAPHY RECORDS -->
+	<bean id="bibliographyRecord1" class="domain.BibliographyRecord">
+		<property name="title" value="title1" />
+		<property name="authors" value="Author1 and author2">
+		</property>
+		<property name="locator" value="12-54325-7894-23" />
+		<property name="subject" ref="subject1" />
+	</bean>
+	
+	<bean id="bibliographyRecord2" class="domain.BibliographyRecord">
+		<property name="title" value="title2" />
+		<property name="authors" value="author2"/>
+		<property name="locator" value="13-325-7894-23-21" />
+		<property name="subject" ref="subject1" />
+	</bean>
+	
+	<bean id="bibliographyRecord3" class="domain.BibliographyRecord">
+		<property name="title" value="title3" />
+		<property name="authors" value="author3"/>
+		<property name="locator" value="124425-7894-233" />
+		<property name="subject" ref="subject2" />
+	</bean>
+
+
+	<!-- GROUPS -->
+	<bean id="group1" class="domain.Group">
+		<property name="name" value="name1" />
+		<property name="description" value="description1" />
+		<property name="startDate" value="01/01/2017" />
+		<property name="endDate" value="12/10/2018" />
+		<property name="deliverables">
+			<list>
+				<ref bean="deliverable1" />
+			</list>
+		</property>
+		<property name="subject" ref="subject1" />
+		<property name="students">
+			<list>
+				<ref bean="student1" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="group2" class="domain.Group">
+		<property name="name" value="name2" />
+		<property name="description" value="description2" />
+		<property name="startDate" value="01/01/2017" />
+		<property name="endDate" value="12/10/2018" />
+		<property name="deliverables">
+			<list>
+				<ref bean="deliverable2" />
+			</list>
+		</property>
+		<property name="subject" ref="subject2" />
+		<property name="students">
+			<list>
+				<!-- <ref bean="student2" /> -->
+				<ref bean="student3" />
+			</list>
+		</property>
+
+	</bean>
+
+
+	<bean id="group3" class="domain.Group">
+		<property name="name" value="name3" />
+		<property name="description" value="description3" />
+		<property name="startDate" value="01/01/2017" />
+		<property name="endDate" value="10/10/2018" />
+		<property name="deliverables">
+			<list>
+				<ref bean="deliverable3" />
+			</list>
+		</property>
+		<property name="subject" ref="subject3" />
+		<property name="students">
+			<list>
+				<ref bean="student3" />
+				<ref bean="student1" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- DELIVERABLES -->
+	<bean id="deliverable1" class="domain.Deliverable">
+		<property name="contents" value="contents1" />
+		<property name="attachment" value="http://www.atachment1.com" />
+		<property name="grade" value="0" />
+		<property name="group" ref="group1" />
+		<property name="assignment" ref="assignment1" />
+	</bean>
+
+	<bean id="deliverable2" class="domain.Deliverable">
+		<property name="contents" value="contents2" />
+		<property name="attachment" value="http://www.atachment2.com" />
+		<property name="grade" value="50" />
+		<property name="group" ref="group2" />
+		<property name="assignment" ref="assignment2" />
+	</bean>
+
+
+	<bean id="deliverable3" class="domain.Deliverable">
+		<property name="contents" value="contents3" />
+		<property name="attachment" value="http://www.atachment3.com" />
+		<property name="grade" value="100" />
+		<property name="group" ref="group3" />
+		<property name="assignment" ref="assignment3" />
+	</bean>
+
+
+	<!-- SEMINARIES -->
+	<bean id="seminary1" class="domain.Seminary">
+		<property name="title" value="TitleSeminary1" />
+		<property name="abstractSeminary" value="abstract1" />
+		<property name="moment" value="10/10/2017 10:00" />
+		<property name="duration" value="2" />
+		<property name="hall" value="Hall1" />
+		<property name="seats" value="25" />
+		<property name="teacher" ref="teacher1" />
+		<property name="students">
+			<list>
+				<ref bean="student1" />
+				<ref bean="student2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="seminary2" class="domain.Seminary">
+		<property name="title" value="TitleSeminary2" />
+		<property name="abstractSeminary" value="abstract2" />
+		<property name="moment" value="10/10/2017 10:00" />
+		<property name="duration" value="1" />
+		<property name="hall" value="Hall2" />
+		<property name="seats" value="25" />
+		<property name="teacher" ref="teacher1" />
+		<property name="students">
+			<list>
+				<ref bean="student1" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="seminary3" class="domain.Seminary">
+		<property name="title" value="TitleSeminary3" />
+		<property name="abstractSeminary" value="abstract3" />
+		<property name="moment" value="10/10/2017 10:00" />
+		<property name="duration" value="1" />
+		<property name="hall" value="Hall3" />
+		<property name="seats" value="0" />
+		<property name="teacher" ref="teacher2" />
+		<property name="students">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<!-- FOLDERS -->
+	<bean id="inbox1" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+
+	<bean id="outbox1" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+				<ref bean="message1" />
+			</list>
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+
+	<bean id="spambox1" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+
+	<bean id="trashbox1" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+	
+	<bean id="folder1" class="domain.Folder">
+		<property name="name" value="folder" />
+		<property name="isSystem" value="false" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+
+
+	<bean id="inbox2" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="outbox2" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="spambox2" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="trashbox2" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="inbox3" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+
+	<bean id="outbox3" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+
+	<bean id="spambox3" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+
+	<bean id="trashbox3" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+
+	<bean id="inbox4" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+
+	<bean id="outbox4" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+
+	<bean id="spambox4" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+
+	<bean id="trashbox4" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+
+	<bean id="inbox5" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+
+	<bean id="outbox5" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+
+	<bean id="spambox5" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+
+	<bean id="trashbox5" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+
+	<bean id="inbox6" class="domain.Folder">
+		<property name="name" value="inbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+
+	<bean id="outbox6" class="domain.Folder">
+		<property name="name" value="outbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+
+	<bean id="spambox6" class="domain.Folder">
+		<property name="name" value="spambox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+
+	<bean id="trashbox6" class="domain.Folder">
+		<property name="name" value="trashbox" />
+		<property name="isSystem" value="true" />
+		<property name="messages">
+			<list />
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+
+	<!-- SPAMS -->
+	<bean id="spam1" class="domain.Spam">
+		<property name="keywords" value="viagra" />
+	</bean>
+
+	<bean id="spam2" class="domain.Spam">
+		<property name="keywords" value="cialis" />
+	</bean>
+
+	<bean id="spam3" class="domain.Spam">
+		<property name="keywords" value="sex" />
+	</bean>
+
+	<bean id="spam4" class="domain.Spam">
+		<property name="keywords" value="love" />
+	</bean>
+
+	<!-- MESSAGES -->
+	<bean id="message1" class="domain.Message">
+		<property name="moment" value="2016/10/22" />
+		<property name="subject" value="subject1" />
+		<property name="body" value="body1" />
+		<property name="priority" value="NEUTRAL" />
+		<property name="folder" ref="outbox1" />
+		<property name="send" ref="admin" />
+		<property name="receives">
+			<list>
+				<ref bean="teacher1" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- BULLETIN -->
+	<bean id="bulletin1" class="domain.Bulletin">
+		<property name="title" value="title1" />
+		<property name="moment" value="2016/10/22 10:00" />
+		<property name="text" value="text1" />
+		<property name="actor" ref="admin" />
+		<property name="comentable" ref="subject1" />
+	</bean>
+	
+	<bean id="bulletin2" class="domain.Bulletin">
+		<property name="title" value="title2" />
+		<property name="moment" value="2016/10/20 10:00" />
+		<property name="text" value="text2" />
+		<property name="actor" ref="teacher1" />
+		<property name="comentable" ref="subject1" />
+	</bean>
+
+	<bean id="bulletin3" class="domain.Bulletin">
+		<property name="title" value="title3" />
+		<property name="moment" value="2016/10/15 10:00" />
+		<property name="text" value="text3" />
+		<property name="actor" ref="teacher2" />
+		<property name="comentable" ref="subject2" />
+	</bean>
+	
+	
+	<!-- SOCIAL IDENTITIES -->
+	<bean id="socialIdentity1" class="domain.SocialIdentity">
+		<property name="nick" value="nick1" />
+		<property name="socialNetwork" value="socialNetwork1" />
+		<property name="link" value="http://www.link1.com" />
+		<property name="photo" value="http://www.photo1.com" />
+		<property name="actor" ref="admin" />
+	</bean>
+
+	<bean id="socialIdentity2" class="domain.SocialIdentity">
+		<property name="nick" value="nick2" />
+		<property name="socialNetwork" value="socialNetwork2" />
+		<property name="link" value="http://www.link2.com" />
+		<property name="photo" value="http://www.photo2.com" />
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="socialIdentity3" class="domain.SocialIdentity">
+		<property name="nick" value="nick3" />
+		<property name="socialNetwork" value="socialNetwork3" />
+		<property name="link" value="http://www.link3.com" />
+		<property name="photo" value="http://www.photo3.com" />
+		<property name="actor" ref="student1" />
+	</bean>
+
+	<bean id="socialIdentity4" class="domain.SocialIdentity">
+		<property name="nick" value="nick4" />
+		<property name="socialNetwork" value="socialNetwork4" />
+		<property name="link" value="http://www.link4.com" />
+		<property name="photo" value="http://www.photo4.com" />
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	
+	<!-- ACTIVITY RECORDS -->
+	<bean id="activityRecordBulletin1" class="domain.ActivityRecord">
+		<property name="moment" value="2016/10/20 10:00" />
+		<property name="description" value="Actor: admin create a bulletin over subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+	
+	<bean id="activityRecordBulletin2" class="domain.ActivityRecord">
+		<property name="moment" value="2016/10/20 10:00" />
+		<property name="description" value="Actor: teacher1 create a bulletin over subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordBulletin3" class="domain.ActivityRecord">
+		<property name="moment" value="2016/10/20 10:00" />
+		<property name="description" value="Actor: teacher2 create a bulletin over subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+	
+	<bean id="activityRecordSubject1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: admin create a subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+	
+	<bean id="activityRecordSubject2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: admin create a subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+	
+	<bean id="activityRecordSubject3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: admin create a subject3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="admin" />
+	</bean>
+	
+	<bean id="activityRecordActivity1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create activity1 over subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordActivity2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create activity2 over subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordActivity3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher2 create activity3 over subject3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+	
+	<bean id="activityRecordAssignment1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create assignment1 over subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordAssignment2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create assignment2 over subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordAssignment3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher2 create assignment3 over subject3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+	
+	<bean id="activityRecordSeminary1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create seminary1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordSeminary2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher1 create seminary2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher1" />
+	</bean>
+	
+	<bean id="activityRecordSeminary3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: teacher2 create seminary3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="teacher2" />
+	</bean>
+	
+	<bean id="activityRecordEnrol1Subject1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student1 enrol in subject1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+	
+	<bean id="activityRecordEnrol1Subject2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student2 enrol in subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+	
+	<bean id="activityRecordEnrol2Subject2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student3 enrol in subject2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+	
+	<bean id="activityRecordEnrol1Subject3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student1 enrol in subject3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+	
+	<bean id="activityRecordEnrol2Subject3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student3 enrol in subject3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+	
+	<bean id="activityRecordDeliverable1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student1 create deliverable1 over assignment1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+	
+	<bean id="activityRecordDeliverable2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student2 create deliverable2 over assignment2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+	
+	<bean id="activityRecordDeliverable3" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student3 create deliverable3 over assignment3" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student3" />
+	</bean>
+	
+	<bean id="activityRecordEnrol1Seminary1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student1 enrol in seminary1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+	
+	<bean id="activityRecordEnrol2Seminary1" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student2 enrol in seminary1" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student2" />
+	</bean>
+	
+	<bean id="activityRecordEnrol1Seminary2" class="domain.ActivityRecord">
+		<property name="moment" value="2017/10/10 10:00" />
+		<property name="description" value="Actor: student1 enrol in seminary2" />
+		<property name="attachments">
+			<list>
+			</list>
+		</property>
+		<property name="actor" ref="student1" />
+	</bean>
+	
+
+	<!-- CATEGORIES -->
+	<bean id="category1" class="domain.Category">
+		<property name="name" value="ACTIVITY" />
+		<property name="subjects">
+			<list>
+			</list>
+		</property>
+		<property name="categoriesChild">
+			<list>
+				<ref bean="category2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="category2" class="domain.Category">
+		<property name="name" value="MATH" />
+		<property name="categoryFather" ref="category1" />
+		<property name="subjects">
+			<list>
+			</list>
+		</property>
+		<property name="categoriesChild">
+			<list>
+				<ref bean="category3" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="category3" class="domain.Category">
+		<property name="name" value="DERIVATED" />
+		<property name="categoryFather" ref="category2" />
+		<property name="subjects">
+			<list>
+				<ref bean="subject1" />
+			</list>
+		</property>
+		<property name="categoriesChild">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="category4" class="domain.Category">
+		<property name="name" value="LITERATURE" />
+		<property name="categoryFather" ref="category1" />
+		<property name="subjects">
+			<list>
+				<ref bean="subject2" />
+			</list>
+		</property>
+		<property name="categoriesChild">
+			<list>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- CONFIGURATIONSYSTEM -->
+	<bean id="configurationSystem" class="domain.ConfigurationSystem">
+		<property name="schoolName" value="Acme Schools" />
+		<property name="banner" value="http://i66.tinypic.com/28l4cx.jpg" />
+	</bean>
+
+</beans>

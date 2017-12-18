@@ -1,0 +1,17 @@
+
+dashboard.findTeacherMoreSubject					= Los profesores que imparten más asignaturas
+dashboard.findTeacherLessSubject					= Los profesores que imparten menos asignaturas
+dashboard.findTeachersPlusMinus10AvgSubjects		= Los profesores que imparten la media de asignaturas más, menos un 10%
+dashboard.findTeachersPlusMinus10AvgSeminaries		= Los profesores que imparten la media de seminarios más, menos un 10%
+dashboard.findActorsPlusMinus10AvgActivityRecords	= Los actores que tienen más, menos un 10% de la media del registro de actividad
+dashboard.ratioSubjectsWithBibliographyRecords		= Ratio de asignaturas con sólo una o dos bibliografias
+dashboard.ratioActorsWithSocialIdentity				= Ratio de actores con al menos una identidad social
+
+dashboard.minMaxAvgSubjectsByTeacher				= El minimo, el maximo y la media de asignaturas impartidas por los profesores
+dashboard.minMaxAvgSeatsBySubject					= El minimo, el maximo y la media de sitios disponibles por asignatura
+dashboard.minMaxAvgStudentsBySubject				= El minimo, el maximo y la media de estudiantes apuntados por asignatura
+dashboard.minMaxAvgAssignmentsBySubject				= El minimo, el maximo y la media de trabajos por asignatura
+dashboard.minMaxAvgSeminariesByTeacher				= El minimo, el maximo y la media de seminarios impartidos por profesor
+dashboard.minMaxAvgActivityRecordsByActor			= El minimo, el maximo y la media de registro de actividad por actor
+dashboard.minMaxAvgBibliographyRecordsBySubject		= El minimo, el maximo y la media de bibliografia por asignatura
+dashboard.minMaxAvgSocialIdentitiesByActor			= El minimo, el maximo y la media de identidades sociales por actor

@@ -1,0 +1,16 @@
+activity.title 				= Titulo
+activity.description 		= Descripcion
+activity.startDate 			= Fecha de Comienzo
+activity.endDate 			= Fecha Fin
+activity.information 		= Información
+activity.create 			= Crear Actividad
+
+activity.submit				= Guardar
+activity.delete				= Borrar
+activity.cancel				= Cancelar
+activity.edit				= Editar
+
+activity.save.error			= No puedes guardar esta actividad porque no pertenece a una asignatura que tu impartes
+activity.delete.error		= No puedes borrar esta actividad porque no pertenece a una asignatura que tu impartes
+activity.date.mismatch		= La fecha de finalización debe ser posterior a la de inicio
+activity.startDate.mismatch	= La fecha de inicio no puede ser pasada

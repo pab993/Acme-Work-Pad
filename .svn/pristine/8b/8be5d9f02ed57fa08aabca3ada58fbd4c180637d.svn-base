@@ -1,0 +1,132 @@
+
+package controllers;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import services.ActivityRecordService;
+import services.ActorService;
+import services.BulletinService;
+import services.ComentableService;
+import domain.ActivityRecord;
+import domain.Actor;
+import domain.Bulletin;
+import domain.ComentableEntity;
+import forms.CommentForm;
+
+@Controller
+@RequestMapping("/comment")
+public class CommentController extends AbstractController {
+
+	@Autowired
+	private BulletinService			commentService;
+
+	@Autowired
+	private ComentableService		comentableService;
+
+	@Autowired
+	private ActivityRecordService	activityRecordService;
+
+	@Autowired
+	private ActorService			actorService;
+
+
+	@RequestMapping(value = "/postComment", method = RequestMethod.GET)
+	public ModelAndView create(@RequestParam final int comentableId) {
+		ModelAndView result;
+		try {
+			final ComentableEntity commentable = this.comentableService.findOneAux(comentableId);
+			Assert.notNull(commentable);
+
+			final CommentForm commentForm = new CommentForm();
+			commentForm.setIdComentable(comentableId);
+
+			result = new ModelAndView("comment/postComment");
+			result.addObject("commentForm", commentForm);
+		} catch (final Throwable oops) {
+			result = new ModelAndView("redirect:/panic/misc.do");
+		}
+		return result;
+
+	}
+
+	@RequestMapping(value = "/postComment", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid final CommentForm commentForm, final BindingResult binding) {
+		ModelAndView result;
+		System.out.println(binding.getAllErrors());
+		final Bulletin comment = this.commentService.reconstruct(commentForm, binding);
+
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(commentForm);
+		else
+			try {
+
+				commentService.save(comment);
+				//				this.activityRecordService.create(saved);
+				ActivityRecord activityRecord = new ActivityRecord();
+				activityRecord.setDescription(actorService.findByPrincipal().getName() + "has post the bulletin/ha creado el boletín : " + comment.getTitle());
+				activityRecord.setActor(actorService.findByPrincipal());
+				activityRecordService.save(activityRecord);
+
+				if (Actor.class.isInstance(comment.getComentable()))
+					result = new ModelAndView("redirect:/actor/seeProfile.do?actorId=" + commentForm.getIdComentable());
+				else
+					result = new ModelAndView("redirect:/subject/display.do?subjectId=" + commentForm.getIdComentable());
+
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(commentForm, "comment.commit.error");
+			}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/ban", method = RequestMethod.GET)
+	public ModelAndView ban(@RequestParam final int commentId) {
+
+		ModelAndView result;
+
+		try {
+			final Bulletin comment = this.commentService.findOne(commentId);
+			Assert.notNull(comment);
+
+			this.commentService.banMethod(commentId);
+
+			result = new ModelAndView("redirect:/welcome/index.do");
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final CommentForm commentForm) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(commentForm, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final CommentForm commentForm, final String message) {
+		ModelAndView result;
+
+		result = new ModelAndView("comment/postComment");
+
+		result.addObject("commentForm", commentForm);
+		result.addObject("message", message);
+
+		return result;
+	}
+
+}

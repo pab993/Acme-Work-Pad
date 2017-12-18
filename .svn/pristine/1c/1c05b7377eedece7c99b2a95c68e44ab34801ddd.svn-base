@@ -1,0 +1,303 @@
+
+package services;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import repositories.SubjectRepository;
+import domain.Administrator;
+import domain.Assignment;
+import domain.BibliographyRecord;
+import domain.Group;
+import domain.Student;
+import domain.Subject;
+import domain.Teacher;
+
+@Service
+@Transactional
+public class SubjectService {
+
+	//Managed Repository =============================================================================
+
+	@Autowired
+	private SubjectRepository			subjectRepository;
+
+	@Autowired
+	private AdministratorService		administratorService;
+
+	@Autowired
+	private AssignmentService			assignmentService;
+
+	@Autowired
+	private BibliographyRecordService	bibliographyRecordService;
+
+	@Autowired
+	private StudentService				studentService;
+
+	@Autowired
+	private GroupService				groupService;
+
+	@Autowired
+	private ActorService				actorService;
+
+
+	//Services
+	// ===============================================================================================
+
+	//CRUDs Methods
+	//===============================================================================================
+
+	public Subject findOne(final int subjectId) {
+		Subject result;
+
+		result = this.subjectRepository.findOne(subjectId);
+
+		return result;
+	}
+
+	public Collection<Subject> findAll() {
+
+		Collection<Subject> result = new HashSet<Subject>();
+
+		result = this.subjectRepository.findAll();
+
+		return result;
+	}
+
+	public Subject create(final Administrator administrator) {
+		Assert.notNull(administrator);
+		final Administrator principal;
+		Subject result;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+		Assert.isTrue(principal.equals(administrator));
+		Assert.isInstanceOf(Administrator.class, principal);
+
+		result = new Subject();
+		result.setTicker(this.tickerGenerator());
+		result.setAdministrator(administrator);
+		administrator.getSubjects().add(result);
+
+		return result;
+	}
+
+	public Subject save(final Subject subject) {
+		Assert.notNull(subject);
+		Subject result;
+		final Administrator principal = this.administratorService.findByPrincipal();
+
+		Assert.isInstanceOf(Administrator.class, principal);
+		Assert.notNull(principal);
+		Assert.isTrue(principal.equals(subject.getAdministrator()));
+		Assert.isInstanceOf(Administrator.class, principal);
+
+		//		principal.getSubjects().add(subject);
+
+		result = this.subjectRepository.save(subject);
+
+		return result;
+	}
+
+	public void delete(final Subject subject) {
+		Assert.notNull(subject);
+		Administrator principal;
+		Collection<Assignment> assignments;
+		Collection<BibliographyRecord> bibliographyRecords;
+		Collection<Student> students;
+		Collection<Group> groups;
+
+		principal = this.administratorService.findByPrincipal();
+		Assert.notNull(principal);
+		Assert.isTrue(principal.equals(subject.getAdministrator()));
+		Assert.isInstanceOf(Administrator.class, principal);
+		//		Assert.isTrue(principal.getSubjects().contains(subject));
+
+		assignments = subject.getAssignments();
+		bibliographyRecords = subject.getBibliographyRecords();
+		students = subject.getStudents();
+		groups = subject.getGroups();
+
+		if (assignments != null)
+			for (final Assignment assignment : assignments)
+				this.assignmentService.delete2(assignment);
+
+		if (bibliographyRecords != null)
+			for (final BibliographyRecord bibliographyRecord : bibliographyRecords)
+				this.bibliographyRecordService.delete2(bibliographyRecord);
+
+		if (students != null)
+			for (final Student student : students)
+				this.studentService.delete2(student);
+
+		if (groups != null)
+			for (final Group group : groups)
+				this.groupService.delete2(group);
+
+		this.subjectRepository.delete(subject);
+
+	}
+
+	//Other Business Methods =========================================================================
+
+	public Collection<Subject> searchSubjectByWords(final String keyWord) {
+		Assert.notNull(keyWord);
+		Collection<Subject> result;
+
+		result = this.subjectRepository.searchSubjectByWords(keyWord);
+
+		return result;
+	}
+
+	public Collection<Subject> findAllByTeacher(final int teacherId) {
+
+		Collection<Subject> result;
+
+		result = this.subjectRepository.findAllByTeacher(teacherId);
+
+		return result;
+	}
+
+	public String tickerGenerator() {
+		String result = "";
+		final String pattern = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789";
+		final String pattern2 = "0123456789";
+		final Random rnd = new Random();
+		//		final int nRnd = LoweService.generaNumeroAleatorio(3, 4);
+		//		final int nRnd2 = LoweService.generaNumeroAleatorio(2, 5);
+
+		for (int i = 0; i < 2; i++)
+			result += pattern.charAt(rnd.nextInt(pattern.length()));
+		result += "-";
+		for (int i = 0; i < 5; i++)
+			result += pattern2.charAt(rnd.nextInt(pattern2.length()));
+
+		final Subject subject = this.subjectRepository.findByTicker(result);
+
+		if (subject != null) {
+			result = "";
+			result = this.tickerGenerator();
+		}
+
+		return result;
+	}
+
+	public Collection<Subject> findAllByNotTeacher() {
+		Collection<Subject> result;
+
+		result = this.subjectRepository.findAllByNotTeacherId();
+
+		return result;
+	}
+
+	public Collection<Subject> findAllByTeacher() {
+		Collection<Subject> result;
+
+		result = this.subjectRepository.findAllByTeacherId();
+
+		return result;
+	}
+
+	public void enrol(final Subject subject) {
+		//		, final Student student) {
+		Assert.isTrue(this.actorService.isStudent());
+		final Student student = (Student) this.actorService.findByPrincipal();
+		Assert.isTrue(subject.getSeats() > 0);
+		Assert.isTrue(!student.getSubjects().contains(subject));
+
+		student.getSubjects().add(subject);
+		subject.getStudents().add(student);
+
+		final Integer seats = subject.getSeats();
+		subject.setSeats(seats - 1);
+	}
+
+	public Collection<Subject> getSubjectByKeyWordWithSeats(final String keyWord) {
+		Assert.notNull(keyWord);
+		Collection<Subject> result;
+
+		result = this.subjectRepository.getSubjectByKeyWordWithSeats(keyWord);
+
+		return result;
+	}
+
+	public Collection<Subject> getSubjectByKeyWordWithoutSeats(final String keyWord) {
+		Assert.notNull(keyWord);
+		Collection<Subject> result;
+
+		result = this.subjectRepository.getSubjectByKeyWordWithoutSeats(keyWord);
+
+		return result;
+	}
+	//Dashboard ---------------------------------
+
+	public Object[] minMaxAvgSeatsBySubject() {
+
+		Object[] result;
+
+		result = this.subjectRepository.minMaxAvgSeatsBySubject();
+
+		return result;
+
+	}
+
+	public Object[] minMaxAvgAssignmentsBySubject() {
+
+		Object[] result;
+
+		result = this.subjectRepository.minMaxAvgAssignmentsBySubject();
+
+		return result;
+
+	}
+
+	public Object[] minMaxAvgBibliographyRecordsBySubject() {
+
+		Object[] result;
+
+		result = this.subjectRepository.minMaxAvgBibliographyRecordsBySubject();
+
+		return result;
+
+	}
+
+	public Object[] ratioSubjectsWithBibliographyRecords() {
+
+		Object[] result;
+
+		result = this.subjectRepository.ratioSubjectsWithBibliographyRecords();
+
+		return result;
+
+	}
+
+	public Object[] minMaxAvgStudentsBySubject() {
+
+		Object[] result;
+
+		result = this.subjectRepository.minMaxAvgStudentsBySubject();
+
+		return result;
+
+	}
+
+	//	====================
+	//	NUEVO
+	//	====================
+	public void addTeacher(final Subject subject, final Teacher teacher) {
+		final Administrator principal = this.administratorService.findByPrincipal();
+		Assert.isInstanceOf(Administrator.class, principal);
+		Assert.notNull(principal);
+
+		subject.setTeacher(teacher);
+		teacher.getSubjects().add(subject);
+		this.subjectRepository.save(subject);
+	}
+
+}

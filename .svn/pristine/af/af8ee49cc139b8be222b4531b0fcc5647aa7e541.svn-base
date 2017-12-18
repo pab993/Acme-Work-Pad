@@ -1,0 +1,124 @@
+
+package controllers;
+
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import services.ActivityRecordService;
+import services.ActorService;
+import services.TeacherService;
+import domain.ActivityRecord;
+import domain.Actor;
+import domain.Teacher;
+
+@Controller
+@RequestMapping("/teacher")
+public class TeacherController extends AbstractController {
+
+	// Services
+	// ============================================================================
+
+	@Autowired
+	private TeacherService			teacherService;
+
+	@Autowired
+	private ActorService			actorService;
+
+	@Autowired
+	private ActivityRecordService	activityRecordService;
+
+
+	// Constructors
+	// ============================================================================
+
+	public TeacherController() {
+		super();
+	}
+
+	// List
+	// ============================================================================
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list() {
+
+		ModelAndView result;
+		Collection<Teacher> teachers;
+
+		teachers = this.teacherService.findAll();
+
+		result = new ModelAndView("teacher/list");
+		result.addObject("teachers", teachers);
+		result.addObject("requestURI", "teacher/list.do");
+
+		return result;
+	}
+
+	// Display Teacher By Subject
+	// ============================================================================
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int subjectId) {
+
+		ModelAndView result;
+
+		try {
+
+			Teacher teacher;
+
+			teacher = this.teacherService.findOneBySubject(subjectId);
+			Assert.notNull(teacher);
+			Actor principal = actorService.findByPrincipal();
+			result = new ModelAndView("teacher/display");
+			if (principal != null) {
+				Collection<ActivityRecord> activityRecords = activityRecordService.findAllByActor(actorService.findByPrincipal().getId());
+				result.addObject("activityRecords", activityRecords);
+			}
+			result.addObject("teacher", teacher);
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+	}
+
+	// Display Profile Teacher
+	// ============================================================================
+
+	@RequestMapping(value = "/profileTeacher", method = RequestMethod.GET)
+	public ModelAndView displayProfile(@RequestParam final int teacherId) {
+
+		ModelAndView result;
+		try {
+
+			Teacher teacher;
+			Collection<ActivityRecord> activityRecords;
+
+			teacher = this.teacherService.findOne(teacherId);
+			Assert.notNull(teacher);
+			activityRecords = teacher.getActivityRecords();
+
+			result = new ModelAndView("teacher/display");
+			result.addObject("teacher", teacher);
+			result.addObject("activityRecords", activityRecords);
+			result.addObject("requestURI", "teacher/profileTeacher.do");
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+	}
+
+}

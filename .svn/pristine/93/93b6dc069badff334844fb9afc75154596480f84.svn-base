@@ -1,0 +1,19 @@
+
+teacher.name				= Name
+teacher.surname				= Surname
+teacher.email				= Email
+teacher.phone				= Phone
+teacher.postalAddress		= Postal Address
+
+subjects.listByTeacher		= Subjects imparted
+teacher.display				= Teacher
+teacher.add.subject			= Add subject
+
+teacher.add					= Add teacher
+
+teacher.activityRecords		= Activity records
+
+activityRecord.moment 				= Moment
+activityRecord.description 			= Description
+activityRecord.attachments 			= Attachments
+activityRecord.edit					= Edit

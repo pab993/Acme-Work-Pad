@@ -1,0 +1,50 @@
+# messages_es.properties
+#
+# Copyright (C) 2017 Universidad de Sevilla
+# 
+# The use of this project is hereby constrained to the conditions of the 
+# TDG Licence, a copy of which you may download from 
+# http://www.tdg-seville.info/License.html
+
+master.page.administrator			= Administrador
+master.page.administrator.action.1	= Acción 1
+master.page.administrator.action.2	= Acción 2
+
+master.page.customer				= Cliente
+master.page.customer.action.1		= Acción 1
+master.page.customer.action.2		= Acción 2
+
+master.page.profile 				= Perfil
+master.page.profile.action.1 		= Acción 1
+master.page.profile.action.2		= Acción 2
+master.page.profile.action.3		= Acción 3
+
+master.page.login 					= Entrar
+master.page.register.registerStudent= Registrar estudiante
+master.page.register.registerTeacher= Registrar profesor
+master.page.logout 					= Salir
+
+master.page.actor.profile			= Ver Perfil
+master.page.mailbox                	= Correo
+master.page.socialIdentity			= Identidades sociales
+master.page.dashboard				= Dashboard
+
+master.page.seminary.myList			= Mis Seminarios
+
+master.page.bibliographyRecord.list	= Lista de Bibliografías
+
+configurationSystem					= Configuración del sistema
+
+master.page.eraseMe					= Información sobre datos personales
+master.page.mostrarBarraCookies		= Cookies
+master.page.barraCookies1			= Se hace uso de las cookies JSESSIONID y LANGUAGE
+master.page.barraCookies2			= Más información
+
+master.page.listSubject				= Lista de asignaturas
+master.page.listTeacher				= Lista de profesores
+master.page.listSeminary			= Lista de seminarios
+master.page.deliverable.list		= Mis entregables
+
+master.page.activityRecord.myList	= Mis registros de actividades
+
+master.page.searchSubject			= Buscar asignaturas

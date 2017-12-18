@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- * converters.xml * * Copyright (C) 2017 Universidad de Sevilla * * The 
+	use of this project is hereby constrained to the conditions of the * TDG 
+	Licence, a copy of which you may download from * http://www.tdg-seville.info/License.html -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd		
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd		
+	">
+
+	<util:list id="converters">
+
+		<bean class="converters.AuthorityToStringConverter" />
+		<bean class="converters.StringToAuthorityConverter" />
+
+		<bean class="converters.UserAccountToStringConverter" />
+		<bean class="converters.StringToUserAccountConverter" />
+
+		<bean class="converters.StringToActorConverter" />
+		<bean class="converters.ActorToStringConverter" />
+
+		<bean class="converters.StringToAdministratorConverter" />
+		<bean class="converters.AdministratorToStringConverter" />
+
+		<bean class="converters.StringToFolderConverter" />
+		<bean class="converters.FolderToStringConverter" />
+
+		<bean class="converters.StringToMessageConverter" />
+		<bean class="converters.MessageToStringConverter" />
+
+		<bean class="converters.StringToSpamConverter" />
+		<bean class="converters.SpamToStringConverter" />
+		
+		<bean class="converters.StringToSubjectConverter" />
+		<bean class="converters.SubjectToStringConverter" />
+		
+		<bean class="converters.StringToTeacherConverter" />
+		<bean class="converters.TeacherToStringConverter" />
+		
+		<bean class="converters.ActivityToStringConverter" />
+		<bean class="converters.StringToActivityConverter" />
+		
+		<bean class="converters.AssignmentToStringConverter" />
+		<bean class="converters.StringToAssignmentConverter" />
+		
+		<bean class="converters.DeliverableToStringConverter" />
+		<bean class="converters.StringToDeliverableConverter" />
+		
+		<bean class="converters.SeminaryToStringConverter" />
+		<bean class="converters.StringToSeminaryConverter" />
+		
+		<bean class="converters.GroupToStringConverter" />
+		<bean class="converters.StringToGroupConverter" />
+		
+		<bean class="converters.StudentToStringConverter" />
+		<bean class="converters.StringToStudentConverter" />
+		
+		<bean class="converters.BibliographyRecordToStringConverter" />
+		<bean class="converters.StringToBibliographyRecordConverter" />
+		
+		<bean class="converters.ActivityRecordToStringConverter" />
+		<bean class="converters.StringToActivityRecordConverter" />
+
+	</util:list>
+
+</beans>

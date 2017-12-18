@@ -1,0 +1,187 @@
+
+package services;
+
+import javax.transaction.Transactional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import utilities.AbstractTest;
+import domain.Bulletin;
+import domain.ComentableEntity;
+
+@ContextConfiguration(locations = {
+	"classpath:spring/junit.xml"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+public class BulletinServiceTest extends AbstractTest {
+
+	// The SUT
+	// ====================================================
+
+	@Autowired
+	private BulletinService		bulletinService;
+
+	@Autowired
+	private ComentableService	comentableService;
+
+
+	// Tests
+	// ====================================================
+
+	/*
+	 * Create bulletins over a comentable object.
+	 * 
+	 * En este caso de uso se crean y se guardan los bulletins que queramos realizar sobre un objeto comentable siempre y cuando
+	 * nos encontramos autentificados, por lo tanto es accesible para cualquier 'actor'.
+	 * Para provocar el error, se intenta guardar medianteun usuario no autentificado e incluyendo un objeto comentable no válido.
+	 */
+
+	protected void createTest(final String username, final int idComentable, final Class<?> expected) {
+		// TODO Auto-generated method stub
+		Class<?> caught;
+
+		caught = null;
+		try {
+
+			this.authenticate(username);
+			final ComentableEntity comentable = this.comentableService.findOneAux(idComentable);
+			this.bulletinService.create(comentable);
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+		this.checkExceptions(expected, caught);
+
+	}
+
+	protected void saveTest(final String username, final int idComentable, final Class<?> expected) {
+		Class<?> caught;
+
+		caught = null;
+		try {
+
+			this.authenticate(username);
+			final ComentableEntity comentable = this.comentableService.findOneAux(idComentable);
+			final Bulletin bulletin = this.bulletinService.create(comentable);
+			bulletin.setText("test");
+			bulletin.setTitle("test");
+			bulletin.setStars(2);
+
+			this.bulletinService.save(bulletin);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	/*
+	 * Ban a bulletin, which requires be a admin
+	 * 
+	 * En este caso de uso se banea un comentario, para esto debe estarse autenticado como un admin,
+	 * Para provocar el error, se intenta acceder mediante un usuario no autentificado.
+	 * o intentado banear un bulletin inexistente
+	 */
+	public void banBulletin(final String username, final Class<?> expected) {
+
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+			final Bulletin bulletin = this.createBulletinAux();
+			this.bulletinService.banMethod(bulletin.getId());
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+		this.checkExceptions(expected, caught);
+	}
+
+	private Bulletin createBulletinAux() {
+		final ComentableEntity comentable = this.comentableService.findOneAux(16);
+		final Bulletin bulletin = this.bulletinService.create(comentable);
+		bulletin.setText("test");
+		bulletin.setTitle("test");
+		bulletin.setStars(2);
+
+		return this.bulletinService.save(bulletin);
+	}
+
+	// Drivers
+	// ====================================================
+
+	@Test
+	public void driverCreateBulletin() {
+
+		final Object testingData1[][] = {
+			// Creación de un bulletin si estoy autentificado como student -> true
+			{
+				"student1", 16, null
+			},
+			// Creación de un bulletin si no estoy autentificado -> false
+			{
+				null, 16, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData1.length; i++)
+			this.createTest((String) testingData1[i][0], (int) testingData1[i][1], (Class<?>) testingData1[i][2]);
+	}
+
+	@Test
+	public void driverSaveBulletin() {
+
+		final Object testingData[][] = {
+			// Si existe el idComentable -> true
+			{
+				"student1", 16, null
+			},
+			// Si no existe el idComentable -> false
+			{
+				"student1", 989, NullPointerException.class
+			}, {
+				// Si no estamos autentificados para guardar un bulletin -> false
+				null, 16, IllegalArgumentException.class
+			}, {
+				// Si no estamos autentificados para guardar un bulletin y el idComentable no existe -> false
+				null, 989, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.saveTest((String) testingData[i][0], (int) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+	@Test
+	public void driverBanBulletin() {
+		final Object testingData[][] = {
+			// Bulletin existente -> true
+			{
+				"admin", null
+			},
+			// Banear un bulletin sin auth -> false
+			{
+				null, IllegalArgumentException.class
+			},
+			// Se indica un teacher que no existe -> false
+			{
+				"teacher", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.banBulletin((String) testingData[i][0], (Class<?>) testingData[i][1]);
+	}
+
+}

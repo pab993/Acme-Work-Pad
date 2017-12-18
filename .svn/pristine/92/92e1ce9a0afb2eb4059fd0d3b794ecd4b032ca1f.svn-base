@@ -1,0 +1,15 @@
+activityRecord.moment 				= Moment
+activityRecord.description 			= Description
+activityRecord.attachments 			= Attachments
+
+activityRecord.create 				= Create a new activity record
+
+activityRecord.save					= Save
+activityRecord.delete				= Delete
+activityRecord.cancel				= Cancel
+activityRecord.edit					= Edit
+
+activityRecord.save.error			= Can't complete your action
+activityRecord.delete.error			= You can not delete this activity record. Remember that it is only possible to edit/delete an activity record that has registered it.
+
+activityRecord.confirm.delete		= Are you sure you wish to delete?

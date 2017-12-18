@@ -1,0 +1,11 @@
+group.name				= Nombre
+group.description		= Descripción
+group.startDate			= Fecha inicio
+group.endDate			= Fecha fin
+
+save					= Guardar
+
+error.save				= Error
+
+date.before				= La fecha fin debe ser porterior a la fecha de inicio
+group.startDate.mismatch = La fecha de inicio no puede ser pasada

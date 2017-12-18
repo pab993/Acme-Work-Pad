@@ -1,0 +1,17 @@
+activity.title 				= Title
+activity.description 		= Description
+activity.startDate 			= Start Date
+activity.endDate 			=	End Date
+activity.information 		= Information
+activity.create 			= Create Activity
+
+
+activity.submit				= Save
+activity.delete				= Delete
+activity.cancel				= Cancel
+activity.edit				= Edit
+
+activity.save.error			= You can't save this activity because doesn't belong to a subject that you teach
+activity.delete.error		= You can't delete this activity because doesn't belong to a subject that you teach
+activity.date.mismatch		= The end date must be greater than start date
+activity.startDate.mismatch	= The start date cannot be past

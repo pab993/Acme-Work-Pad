@@ -1,0 +1,15 @@
+deliverable.assigment			= Assigment
+deliverable.contents			= Content
+deliverable.attachment			= Attachment
+deliverable.grade				= Grade
+deliverable.group				= Group
+
+deliverable.editGrade			= Graduate
+
+deliverable.save 				= Save
+deliverable.delete 				= Delete
+deliverable.cancel				= Cancel
+
+deliverable.commit.error		= Error
+deliverable.errorDate			= You are out of date
+errorDefault					= Error

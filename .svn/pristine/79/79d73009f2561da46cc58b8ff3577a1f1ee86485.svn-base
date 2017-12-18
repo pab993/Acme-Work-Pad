@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       
+<tiles-definitions>
+
+	<definition name="teacher/list" extends="master.page">	
+		<put-attribute name="title" value="Lista de profesores"/>
+		<put-attribute name="body" value="/views/teacher/list.jsp" />
+	</definition>
+
+	<definition name="teacher/display" extends="master.page">	
+		<put-attribute name="title" value="Mostrar profesor"/>
+		<put-attribute name="body" value="/views/teacher/display.jsp" />
+	</definition>	
+
+</tiles-definitions>

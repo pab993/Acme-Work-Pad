@@ -1,0 +1,51 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
+
+
+
+<br />
+<display:table name="deliverables" pagesize="5" class="displaytag" requestURI="${requestURI}" id="row">
+	
+	<spring:message code="deliverable.group" var="headerTag" />
+	<display:column property="group.name" title="${headerTag}"/>
+	
+	<spring:message code="deliverable.assigment" var="headerTag" />
+	<display:column property="assignment.title" title="${headerTag}"/>
+	
+	<spring:message code="deliverable.grade" var="headerTag" />
+	<display:column property="grade" title="${headerTag}"/>
+	
+	<spring:message code="deliverable.contents" var="headerTag" />
+	<display:column property="contents" title="${headerTag}"/>
+	
+	<spring:message code="deliverable.attachment" var="informationHeader" />
+	<%-- <display:column property="information" title="${informationHeader}" /> --%>
+	<display:column title="${informationHeader}">
+		<jstl:if test="${row.attachment != null }">
+			<a href="${row.attachment }"> ${row.attachment}</a>
+		</jstl:if>
+		<jstl:if test="${row.attachment == null }"></jstl:if>
+	</display:column>
+	
+	<security:authorize access="hasRole('TEACHER')">
+		<jstl:if test="${principal.id eq row.assignment.subject.teacher.id}">
+			<%-- <jstl:if test="${ row.grade eq 0 or row.grade eq null }"> --%>
+				<display:column>
+					<a href="deliverable/teacher/edit.do?deliverableId=${row.id}"> <spring:message
+							code="deliverable.editGrade"></spring:message></a>
+				</display:column>
+			<%-- </jstl:if> --%>
+		</jstl:if>
+	</security:authorize>
+	
+</display:table>
+

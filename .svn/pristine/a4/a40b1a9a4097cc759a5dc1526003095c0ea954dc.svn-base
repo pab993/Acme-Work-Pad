@@ -1,0 +1,34 @@
+# messages.properties
+#
+# Copyright (C) 2017 Universidad de Sevilla
+# 
+# The use of this project is hereby constrained to the conditions of the 
+# TDG Licence, a copy of which you may download from 
+# http://www.tdg-seville.info/License.html
+
+actor.name						= Name
+actor.surname					= Surname
+actor.email						= Email
+actor.phone						= Phone Number
+actor.postalAddress				= Postal address
+
+comment.title 					= Title
+comment.text 					= Text
+comment.stars 					= Stars
+comment.userName				= UserName
+
+ban								= Ban
+unBan							= Unban
+
+postComment 					= Post bulletin
+display.actor 					= View profile 
+
+actor.edit.profile				= Edit profile
+actor.personalData				= Personal data
+actor.submit					= Save
+actor.save.error				= Cannot commit this operation
+actor.postalAddress.error		= The pattern of the postal address is not correct
+actor.phone.error				= The pattern of the phone is not correct
+actor.cancel					= Back
+
+phone.ask							= This phone number doesnt match with the recommended pattern. Do you really want to enter this value?

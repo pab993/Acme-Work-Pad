@@ -1,0 +1,147 @@
+
+package domain;
+
+import java.util.Collection;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.SafeHtml;
+import org.hibernate.validator.constraints.SafeHtml.WhiteListType;
+
+@Entity
+@Access(AccessType.PROPERTY)
+public class Subject extends ComentableEntity {
+
+	private String	title;
+	private String	ticker;
+	private String	syllabus;
+	private Integer	seats;
+
+
+	public Subject() {
+		super();
+	}
+
+	@NotBlank
+	@SafeHtml(whitelistType = WhiteListType.NONE)
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(final String title) {
+		this.title = title;
+	}
+
+	@Column(unique = true)
+	@Pattern(regexp = "^\\w{2}-\\d{5}$")
+	@SafeHtml(whitelistType = WhiteListType.NONE)
+	public String getTicker() {
+		return this.ticker;
+	}
+
+	public void setTicker(final String ticker) {
+		this.ticker = ticker;
+	}
+
+	@NotBlank
+	@SafeHtml(whitelistType = WhiteListType.NONE)
+	public String getSyllabus() {
+		return this.syllabus;
+	}
+
+	public void setSyllabus(final String syllabus) {
+		this.syllabus = syllabus;
+	}
+
+	@NotNull
+	@Min(1)
+	public Integer getSeats() {
+		return this.seats;
+	}
+
+	public void setSeats(final Integer seats) {
+		this.seats = seats;
+	}
+
+
+	//Relationships
+	private Collection<Group>				groups;
+	private Collection<Student>				students;
+	private Collection<BibliographyRecord>	bibliographyRecords;
+	private Collection<Assignment>			assignments;
+	private Teacher							teacher;
+	private Administrator					administrator;
+
+
+	@Valid
+	@OneToMany(mappedBy = "subject")
+	public Collection<Group> getGroups() {
+		return this.groups;
+	}
+
+	public void setGroups(final Collection<Group> groups) {
+		this.groups = groups;
+	}
+
+	@Valid
+	@ManyToMany()
+	public Collection<Student> getStudents() {
+		return this.students;
+	}
+
+	public void setStudents(final Collection<Student> students) {
+		this.students = students;
+	}
+
+	@Valid
+	@OneToMany(mappedBy = "subject")
+	public Collection<BibliographyRecord> getBibliographyRecords() {
+		return this.bibliographyRecords;
+	}
+
+	public void setBibliographyRecords(final Collection<BibliographyRecord> bibliographyRecords) {
+		this.bibliographyRecords = bibliographyRecords;
+	}
+
+	@Valid
+	@OneToMany(mappedBy = "subject")
+	public Collection<Assignment> getAssignments() {
+		return this.assignments;
+	}
+
+	public void setAssignments(final Collection<Assignment> assignments) {
+		this.assignments = assignments;
+	}
+
+	@Valid
+	@ManyToOne(optional = true)
+	public Teacher getTeacher() {
+		return this.teacher;
+	}
+
+	public void setTeacher(final Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	@Valid
+	@ManyToOne(optional = false)
+	public Administrator getAdministrator() {
+		return this.administrator;
+	}
+
+	public void setAdministrator(final Administrator administrator) {
+		this.administrator = administrator;
+	}
+
+}

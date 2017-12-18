@@ -1,0 +1,15 @@
+activityRecord.moment 				= Momento
+activityRecord.description 			= Descripcion
+activityRecord.attachments 			= Archivos
+
+activityRecord.create 				= Crear un nuevo registro de actividad
+
+activityRecord.save					= Guardar
+activityRecord.delete				= Borrar
+activityRecord.cancel				= Cancelar
+activityRecord.edit					= Editar
+
+activityRecord.save.error			= No se puede completar su operación
+activityRecord.delete.error			= No se puede borrar este registro de actividad. Recuerda que sólo es posible editar/eliminar un registro de actividad aquel que la haya registrado.
+
+activityRecord.confirm.delete		= ¿Estás seguro que quiere eliminarlo?

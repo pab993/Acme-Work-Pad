@@ -1,0 +1,16 @@
+
+teacher.name				= Nombre
+teacher.surname				= Apellidos
+teacher.email				= Correo electrónico
+teacher.phone				= Teléfono
+teacher.postalAddress		= Dirección postal
+
+subjects.listByTeacher		= Asignaturas que imparte
+teacher.display				= Profesor
+teacher.add.subject			= Añadir asignatura
+
+teacher.add					= Añadir profesor
+
+teacher.activityRecords		= Registro de actividades
+
+

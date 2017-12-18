@@ -1,0 +1,44 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security"	uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags" %>
+
+<fieldset>
+
+	<spring:message code="teacher.name" />
+	:
+	<jstl:out value="${teacher.name}"></jstl:out>
+	<br>
+	<spring:message code="teacher.surname" />
+	:
+	<jstl:out value="${teacher.surname}"></jstl:out>
+	<br>
+	<spring:message code="teacher.email" />
+	:
+	<jstl:out value="${teacher.email}"></jstl:out>
+	<br>
+	<spring:message code="teacher.phone" />
+	:
+	<jstl:out value="${teacher.phone}"></jstl:out>
+	<br>
+	<spring:message code="teacher.postalAddress" />
+	:
+	<jstl:out value="${teacher.postalAddress}"></jstl:out>
+
+</fieldset>
+
+	<br>
+	<security:authorize access="hasRole('ADMIN')">
+		<jstl:if test="${teacher != null}">
+			<input type="button" name="AddProperty"
+				value="<spring:message code="teacher.add.subject" />"
+				onclick="javascript: window.location.replace('teacher/addSubject.do?teacherId=${teacher.id}')" />
+		</jstl:if>
+	</security:authorize>

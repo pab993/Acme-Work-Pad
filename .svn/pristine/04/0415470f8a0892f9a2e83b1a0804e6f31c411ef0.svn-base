@@ -1,0 +1,16 @@
+assignment.title 			= Titulo
+assignment.description 		= Descripcion
+assignment.startDate 		= Fecha de Comienzo
+assignment.endDate 			= Fecha Fin
+assignment.information 		= Información
+assignment.create 			= Crear Trabajo
+
+assignment.submit			= Guardar
+assignment.delete			= Borrar
+assignment.cancel			= Cancelar
+assignment.edit				= Editar
+
+assignment.save.error		= No puedes guardar este trabajo porque no pertenece a una asignatura que impartas
+assignment.delete.error		= No puedes borrar esta actividad porque no pertenece a una asignatura que impartas o tiene algun entregable 
+assignment.date.mismatch	= La fecha de finalización debe ser posterior a la de inicio
+assignment.startDate.mismatch	= La fecha de inicio no puede ser pasada

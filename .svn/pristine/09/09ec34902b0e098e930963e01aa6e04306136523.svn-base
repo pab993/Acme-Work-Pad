@@ -1,0 +1,57 @@
+
+subject.title				= Título
+subject.ticker				= Ticker
+subject.syllabus			= Programa
+subject.seats				= Asientos
+teacher.display				= Mostrar profesor
+subject.display				= Mostrar asignatura
+subject.teacher				= Profesores
+
+subject.add					= Añadir
+activity.list				= Actividades
+assignment.list				= Trabajos
+display						= Mostrar
+enrol 						= Unirse
+subject.error.enrol			= No quedan sitios
+subject.errorDefault		= Error
+bibliographyRecord.list		= Ver Bibliografías
+
+
+subject.edit				= Editar
+subject.create				= Crear una nueva asignatura
+subject.delete 				= Borrar
+subject.save				= Guardar
+subject.cancel				= Cancelar
+
+subject.save.error			= No se puede completar su operación
+subject.delete.error		= No se puede borrar esta asignatura. Recuerda que sólo es posible editar/eliminar una asignatura aquel que la haya registrado.
+
+subject.confirm.delete  	= ¿Estas seguro que quiere eliminarlo?
+subject.groups 				= Grupos
+group.name					= Nombre
+group.description			= Descripción
+group.startDate				= Fecha inicio
+group.endDate				= Fecha fin
+join.group					= Unirse
+group.error.join			= No estás dentro de las fechas
+
+new.group					= Crear grupo
+
+create.deliverable			= Crear un entregable
+my.deliverable				= Mis entregables
+
+subject.search				= Buscar
+
+subject.searchFormWithSeats	= Lista de asignaturas con asientos libres
+subject.searchFormWithoutSeats	= Lista de asignaturas sin asientos libres
+
+subject.add.teacher			= Añadir profesor
+
+bulletin.title				= Título
+bulletin.moment				= Momento
+bulletin.text				= Texto
+bulletin.stars				= Estrellas
+actor.name					= Nombre
+postComment					= Publicar anuncio
+
+subject.bulletins			= Anuncios

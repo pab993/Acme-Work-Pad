@@ -1,0 +1,304 @@
+
+package services;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+
+import javax.transaction.Transactional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
+
+import utilities.AbstractTest;
+import domain.Seminary;
+import domain.Student;
+import domain.Teacher;
+
+@ContextConfiguration(locations = {
+	"classpath:spring/junit.xml"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+public class SeminaryServiceTest extends AbstractTest {
+
+	// Attributes -----------------------------------------------------------
+	@Autowired
+	private SeminaryService	seminaryService;
+
+	@Autowired
+	private ActorService	actorService;
+
+	@Autowired
+	private GroupService	groupService;
+
+	@Autowired
+	private TeacherService	teacherService;
+
+
+	// Colección de test para probar el requisito 13.1, enrol a subejct.
+	// Los tests comprueban que:
+	// Un actor autenticado como Student puede registrarse a un seminario correctamente.
+	// Un actor autenticado como Student no puede registrarse a un seminario si ya está inscrito a el.
+	// Un actor autenticado como Student no puede registrarse a un seminario si no hay plazas disponibles.
+	// Un actor no autenticado no puede registrarse a un seminario.
+	// Un actor autenticado como Admin no puede registrarse a un seminario.
+
+	@Test
+	public void driverRegisterSeminary() {
+		final Object testingData[][] = {
+			{
+				"student2", 35, null
+			}, {
+				"student2", 34, IllegalArgumentException.class
+			}, {
+				"student3", 36, IllegalArgumentException.class
+			}, {
+				null, 30, IllegalArgumentException.class
+			}, {
+				"admin", 30, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateRegisterSeminary((String) testingData[i][0], (int) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	protected void templateRegisterSeminary(final String username, final int seminaryId, final Class<?> expected) {
+		Class<?> caught;
+
+		caught = null;
+		try {
+			super.authenticate(username);
+
+			final Seminary seminary = this.seminaryService.findOne(seminaryId);
+			this.seminaryService.register(seminary);
+			final Student student = (Student) this.actorService.findByPrincipal();
+			Assert.isTrue(seminary.getStudents().contains(student));
+			super.unauthenticate();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
+	}
+
+	// Colección de test para probar el requisito 13.1, enrol a subejct.
+	// Los tests comprueban que:
+	// Un actor autenticado como Student puede registrarse a un seminario correctamente.
+	// Un actor autenticado como Student no puede registrarse a un seminario si ya está inscrito a el.
+	// Un actor autenticado como Student no puede registrarse a un seminario si no hay plazas disponibles.
+	// Un actor no autenticado no puede registrarse a un seminario.
+	// Un actor autenticado como Admin no puede registrarse a un seminario.
+
+	/*
+	 * Create a new seminary.
+	 * 
+	 * En este caso de uso un teacher puede crear un seminary.
+	 */
+
+	@SuppressWarnings("deprecation")
+	public void seminaryCreateTest(final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+		final Teacher teacher = this.teacherService.findOne(14);
+		final Collection<Student> students = new HashSet<Student>();
+
+		try {
+
+			this.authenticate(username);
+
+			final Seminary result = this.seminaryService.create();
+
+			final Date moment = new Date();
+
+			result.setTitle(title);
+			result.setAbstractSeminary("abstrat");
+			result.setMoment(moment);
+			result.setDuration(23);
+			result.setSeats(25);
+			result.setHall("hall");
+			result.setTeacher(teacher);
+			result.setStudents(students);
+
+			this.seminaryService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	/*
+	 * Edit a new seminary.
+	 * 
+	 * En este caso de uso un teacher puede editar un seminary existente.
+	 */
+
+	public void editSeminaryTest(final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			Seminary result;
+
+			result = this.seminaryService.findOne(34);
+
+			result.setTitle(title);
+
+			this.seminaryService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	/*
+	 * Delete a seminary.
+	 * 
+	 * En este caso de uso un teacher puede borrar un seminary existente.
+	 */
+
+	public void deleteSeminaryTest(final String username, final int seminaryId, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+			final Seminary seminary = this.seminaryService.findOne(seminaryId);
+
+			this.authenticate(username);
+
+			this.seminaryService.delete(seminary);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	// Drivers
+	// ===================================================
+
+	@Test
+	public void driverSeminaryCreateTest() {
+
+		final Object testingData[][] = {
+			// Crear un seminary estando logueado como teacher -> true
+			{
+				"teacher1", "seminary de prueba", null
+			},
+			// Crear un seminary sin estar logueado --> false
+			{
+				null, "seminary de prueba", IllegalArgumentException.class
+			},
+			// Crear un seminary logueado como student-> false
+			{
+				"student1", "seminary de prueba", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.seminaryCreateTest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+
+	}
+
+	@Test
+	public void driverEditSeminaryTest() {
+
+		final Object testingData[][] = {
+			// Editar un seminary estando logueado como teacher -> true
+			{
+				"teacher1", "seminary de prueba", null
+			},
+			// Editar un seminary sin estar logueado -> false
+			{
+				null, "seminary de prueba", IllegalArgumentException.class
+			},
+			// Editar un seminary logueado como student -> false
+			{
+				"student1", " seminary de prueba", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.editSeminaryTest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+	@Test
+	public void driverDeleteSeminaryTest() {
+
+		final Object testingData[][] = {
+			// Borrar un seminary estando logueado como teacher -> true
+			{
+				"teacher2", 36, null
+			},
+			// Borrar un seminary sin estar logueado -> false
+			{
+				null, 36, IllegalArgumentException.class
+			},
+			// Borrar un seminary estando logueado como student -> false
+			{
+				"student1", 36, IllegalArgumentException.class
+			},
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteSeminaryTest((String) testingData[i][0], (int) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	@Test
+	public void driverUnregisterSeminary() {
+		final Object testingData[][] = {
+			{
+				"student1", 34, null
+			}, {
+				"student2", 36, IllegalArgumentException.class
+			}, {
+				"teacher1", 36, IllegalArgumentException.class
+			}, {
+				null, 30, IllegalArgumentException.class
+			}, {
+				"admin", 30, IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.templateUnregisterSeminary((String) testingData[i][0], (int) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	protected void templateUnregisterSeminary(final String username, final int seminaryId, final Class<?> expected) {
+		Class<?> caught;
+
+		caught = null;
+		try {
+			super.authenticate(username);
+
+			final Seminary seminary = this.seminaryService.findOne(seminaryId);
+			this.seminaryService.unregister(seminary);
+			final Student student = (Student) this.actorService.findByPrincipal();
+			Assert.isTrue(!seminary.getStudents().contains(student));
+			super.unauthenticate();
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		super.checkExceptions(expected, caught);
+	}
+
+}

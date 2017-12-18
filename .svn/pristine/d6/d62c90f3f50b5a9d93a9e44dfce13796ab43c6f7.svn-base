@@ -1,0 +1,12 @@
+bibliographyRecord.title 				= Titulo
+bibliographyRecord.authors				= Autores
+bibliographyRecord.locator				= Localizador
+
+bibliographyRecord.submit				= Guardar
+bibliographyRecord.delete				= Borrar
+bibliographyRecord.cancel				= Cancelar
+bibliographyRecord.edit					= Editar
+bibliographyRecord.create				= Crear Bibliografía
+
+bibliographyRecord.save.error		= No puedes guardar esta bibliografía porque no pertenece a una asignatura tuya.
+bibliographyRecord.delete.error		= No puedes borrar esta bibliografía porque no pertenece a una asignatura tuya.

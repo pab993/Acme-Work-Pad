@@ -1,0 +1,10 @@
+group.name				= Name
+group.description		= Description
+group.startDate			= Start date
+group.endDate			= End date
+
+save					= Save
+
+error.save				= Error
+
+date.before				= The end date must be after the start date

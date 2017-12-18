@@ -1,0 +1,117 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
+
+
+
+
+<div>
+	<jstl:if test="${errorMessage != null}">
+		<br />
+		<span class="message" style="color: red"><spring:message
+				code="${errorMessage}" /></span>
+	</jstl:if>
+</div>
+
+
+
+<security:authorize access="hasRole('ADMIN')">
+	<div>
+		<h3>
+			<a href="subject/create.do"><spring:message code="subject.create" /></a>
+		</h3>
+	</div>
+</security:authorize>
+
+<display:table name="subjects" pagesize="5" class="displaytag" requestURI="${requestURI}" id="row">
+	
+	<spring:message code="subject.title" var="headerTag" />
+	<display:column property="title" title="${headerTag}" />
+
+	<spring:message code="subject.ticker" var="headerTag" />
+	<display:column property="ticker" title="${headerTag}" />
+
+	<spring:message code="subject.syllabus" var="headerTag" />
+	<display:column property="syllabus" title="${headerTag}" />
+
+	<spring:message code="subject.seats" var="headerTag" />
+	<display:column property="seats" title="${headerTag}" />
+
+	<display:column>
+		<a href="teacher/display.do?subjectId=${row.id}"> <spring:message
+				code="teacher.display"></spring:message></a>
+	</display:column>
+	
+	<%-- <security:authorize access="hasRole('ADMIN')">
+		<display:column>
+			<a href="subject/display.do?subjectId=${row.id}"> <spring:message
+					code="subject.display"></spring:message></a>
+		</display:column>
+	</security:authorize>	 --%>
+	
+	<security:authorize access="hasRole('ADMIN')">
+		<display:column>
+			<a href="subject/edit.do?subjectId=${row.id}"> <spring:message
+					code="subject.edit"></spring:message></a>
+		</display:column>
+	</security:authorize>
+	
+	<security:authorize access="hasRole('ADMIN')">
+		<jstl:if test="${addProperty}">	
+			<display:column>	
+				<a href="subject/add.do?subjectId=${row.id}&teacherId=${teacherId}">
+					<spring:message code="subject.add" />
+				</a>
+			</display:column>
+		</jstl:if>	
+	</security:authorize>	
+
+	<security:authorize access="isAuthenticated()">
+		<display:column>
+			<a href="activity/list.do?subjectId=${row.id}"> <spring:message
+					code="activity.list"></spring:message></a>
+		</display:column>
+
+		<display:column>
+			<a href="assignment/list.do?subjectId=${row.id}"> <spring:message
+					code="assignment.list"></spring:message></a>
+		</display:column>
+		
+		<display:column>
+				<a href="bibliographyRecord/list.do?subjectId=${row.id}">
+					<spring:message code="bibliographyRecord.list"></spring:message>
+				</a>
+			</display:column>
+			
+		<display:column>
+				<a href="subject/display.do?subjectId=${row.id}"> <spring:message
+						code="display"></spring:message></a>
+			</display:column>
+
+		<security:authorize access="hasRole('STUDENT')">
+			<display:column>
+				<jstl:if test="${!studentSubject.contains(row) && row.seats >= 1}">
+					<a href="subject/student/enrol.do?subjectId=${row.id}"> <spring:message
+							code="enrol"></spring:message>
+					</a>
+				</jstl:if>
+			</display:column>
+			
+			
+
+
+			
+		</security:authorize>
+	</security:authorize>
+
+
+</display:table>

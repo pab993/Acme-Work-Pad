@@ -1,0 +1,447 @@
+
+package controllers;
+
+import java.util.Collection;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import services.ActivityRecordService;
+import services.ActorService;
+import services.AdministratorService;
+import services.BulletinService;
+import services.SubjectService;
+import services.TeacherService;
+import domain.ActivityRecord;
+import domain.Administrator;
+import domain.Bulletin;
+import domain.Group;
+import domain.Student;
+import domain.Subject;
+import domain.Teacher;
+
+@Controller
+@RequestMapping("/subject")
+public class SubjectController extends AbstractController {
+
+	// Services
+	// ============================================================================
+
+	@Autowired
+	private SubjectService			subjectService;
+
+	@Autowired
+	private TeacherService			teacherService;
+
+	@Autowired
+	private AdministratorService	administratorService;
+	@Autowired
+	private ActorService			actorService;
+
+	@Autowired
+	private ActivityRecordService	activityRecordService;
+	@Autowired
+	private BulletinService			commentService;
+
+
+	// Constructors
+	// ============================================================================
+
+	public SubjectController() {
+		super();
+	}
+
+	// List
+	// ============================================================================
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ModelAndView list(@RequestParam(defaultValue = "0", required = false) final int errorMessage) {
+
+		ModelAndView result;
+		Collection<Subject> subjects;
+
+		subjects = this.subjectService.findAll();
+
+		result = new ModelAndView("subject/list");
+
+		if (this.actorService.isAuthenticated())
+			if (this.actorService.isStudent()) {
+				final Student student = (Student) this.actorService.findByPrincipal();
+				final Collection<Subject> studentSubject = student.getSubjects();
+				result.addObject("studentSubject", studentSubject);
+
+			} else if (this.actorService.isTeacher()) {
+
+				final Teacher teacher = (Teacher) this.actorService.findByPrincipal();
+
+				result.addObject("teacher", teacher);
+
+			}
+		result.addObject("subjects", subjects);
+		result.addObject("requestURI", "subject/list.do");
+
+		this.error(result, errorMessage);
+		return result;
+
+	}
+	// List By Teacher
+	// ============================================================================
+
+	@RequestMapping(value = "/listByTeacher", method = RequestMethod.GET)
+	public ModelAndView listByTeacher(@RequestParam final int teacherId) {
+
+		ModelAndView result;
+
+		try {
+
+			Collection<Subject> subjects;
+
+			subjects = this.subjectService.findAllByTeacher(teacherId);
+			Assert.notNull(subjects);
+
+			result = new ModelAndView("subject/listByTeacher");
+			result.addObject("subjects", subjects);
+			result.addObject("requestURI", "subject/listByTeacher.do");
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+	}
+
+	// Display
+	// ============================================================================
+
+	@RequestMapping(value = "/display", method = RequestMethod.GET)
+	public ModelAndView display(@RequestParam final int subjectId, @RequestParam(defaultValue = "0", required = false) final int errorMessage) {
+
+		ModelAndView result;
+
+		try {
+
+			Subject subject;
+
+			result = new ModelAndView("subject/display");
+
+			subject = this.subjectService.findOne(subjectId);
+			Assert.notNull(subject);
+
+			final Collection<Group> groups = subject.getGroups();
+			final Collection<Bulletin> bulletins = this.commentService.filterComments(subject);
+			if (this.actorService.isAuthenticated())
+				if (this.actorService.isStudent()) {
+					final Student student = (Student) this.actorService.findByPrincipal();
+					final Collection<Group> studentGroup = student.getGroups();
+					result.addObject("studentGroup", studentGroup);
+					final Collection<Subject> studentSubject = student.getSubjects();
+					result.addObject("studentSubject", studentSubject);
+					Boolean join = false;
+					//join comprueba que el estudiante logueado está incrito en esa asignatura
+					if (studentSubject.contains(subject))
+						join = true;
+					//join 2 comprueba que el estudiante logueado no pertenezca a ningun grupo
+					Boolean join2 = true;
+					for (final Group grg : subject.getGroups())
+						if (studentGroup.contains(grg))
+							join2 = false;
+					result.addObject("join", join);
+					result.addObject("join2", join2);
+
+				}
+
+			result.addObject("subject", subject);
+			result.addObject("groups", groups);
+			result.addObject("bulletins", bulletins);
+
+			this.error(result, errorMessage);
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+	}
+	// Search-Seats
+	// ============================================================================
+
+	@RequestMapping(value = "/searchSeats", method = RequestMethod.GET)
+	public ModelAndView searchSeats() {
+
+		ModelAndView result;
+
+		result = new ModelAndView("subject/searchSeats");
+		result.addObject("requestURI", "subject/searchSeats.do");
+
+		return result;
+	}
+
+	// SearchForm With Seats
+	// ==============================================================================
+
+	@RequestMapping(value = "/searchFormWithSeats", method = RequestMethod.GET)
+	public ModelAndView listSearch() {
+		ModelAndView result;
+		Collection<Subject> subjects;
+		Boolean firstTime;
+		Boolean withSeats;
+
+		subjects = this.subjectService.findAll();
+		firstTime = true;
+		withSeats = true;
+
+		result = new ModelAndView("subject/search");
+		result.addObject("subjects", subjects);
+		result.addObject("requestURI", "subject/searchFormWithSeats.do");
+		result.addObject("firstTime", firstTime);
+		result.addObject("withSeats", withSeats);
+
+		return result;
+	}
+
+	// Search With Seats
+	// ==============================================================================
+
+	@RequestMapping(value = "/searchWithSeats", method = RequestMethod.POST)
+	public ModelAndView search(@RequestParam("keyword") final String keyword) {
+		ModelAndView result;
+		Collection<Subject> subjects;
+		Boolean withSeats;
+
+		subjects = this.subjectService.getSubjectByKeyWordWithSeats(keyword);
+		withSeats = true;
+
+		result = new ModelAndView("subject/search");
+		result.addObject("subjects", subjects);
+		result.addObject("withSeats", withSeats);
+
+		return result;
+	}
+
+	// SearchForm Without Seats
+	// ==============================================================================
+
+	@RequestMapping(value = "/searchFormWithoutSeats", method = RequestMethod.GET)
+	public ModelAndView listSearchWithoutSeats() {
+		ModelAndView result;
+		Collection<Subject> subjects;
+		Boolean firstTime;
+
+		subjects = this.subjectService.findAll();
+		firstTime = true;
+
+		result = new ModelAndView("subject/search");
+		result.addObject("subjects", subjects);
+		result.addObject("requestURI", "subject/searchFormWithoutSeats.do");
+		result.addObject("firstTime", firstTime);
+
+		return result;
+	}
+
+	// Search Without Seats
+	// ==============================================================================
+
+	@RequestMapping(value = "/searchWithoutSeats", method = RequestMethod.POST)
+	public ModelAndView searchWithoutSeats(@RequestParam("keyword") final String keyword) {
+		ModelAndView result;
+		Collection<Subject> subjects;
+
+		subjects = this.subjectService.getSubjectByKeyWordWithoutSeats(keyword);
+
+		result = new ModelAndView("subject/search");
+		result.addObject("subjects", subjects);
+
+		return result;
+	}
+
+	//	// Add Subject
+	//	// ============================================================================
+	//
+	//	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	//	public ModelAndView addSubject(@RequestParam final int subjectId, @RequestParam final int teacherId) {
+	//		ModelAndView result;
+	//		try {
+	//
+	//			Subject subject;
+	//			Teacher teacher;
+	//
+	//			subject = this.subjectService.findOne(subjectId);
+	//			teacher = this.teacherService.findOne(teacherId);
+	//			
+	//
+	//			this.teacherService.addSubject(teacher, subject);
+	//			result = new ModelAndView("redirect:/teacher/display.do?subjectId=" + subjectId);
+	//
+	//		} catch (final Throwable oops) {
+	//
+	//			result = new ModelAndView("redirect:/panic/misc.do");
+	//
+	//		}
+	//		return result;
+	//
+	//	}
+
+	// Create
+	// =================================================================================================
+
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+		Administrator principal;
+
+		principal = this.administratorService.findByPrincipal();
+		final Subject subject = this.subjectService.create(principal);
+
+		result = this.createEditModelAndView(subject);
+
+		return result;
+	}
+
+	// Edition
+	// =============================================================================
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int subjectId) {
+		ModelAndView result;
+		try {
+
+			final Subject subject = this.subjectService.findOne(subjectId);
+			Assert.notNull(subject);
+
+			result = this.createEditModelAndView(subject);
+
+		} catch (final Throwable oops) {
+
+			result = new ModelAndView("redirect:/panic/misc.do");
+
+		}
+
+		return result;
+
+	}
+
+	// Save
+	// =============================================================================
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid final Subject subject, final BindingResult binding) {
+		ModelAndView result;
+
+		try {
+
+			if (binding.hasErrors())
+				result = this.createEditModelAndView(subject, "subject.save.error");
+			else {
+				result = new ModelAndView("redirect:/subject/list.do");
+				final Subject saved = this.subjectService.save(subject);
+				//				this.activityRecordService.create(saved);
+				ActivityRecord activityRecord = new ActivityRecord();
+				if (subject.getId() == 0) {
+					activityRecord.setDescription(actorService.findByPrincipal().getName() + " has create/ha creado : " + subject.getTitle());
+				} else {
+					activityRecord.setDescription(actorService.findByPrincipal().getName() + " has edit/ha editado : " + subject.getTitle());
+				}
+				activityRecord.setActor(actorService.findByPrincipal());
+				activityRecordService.save(activityRecord);
+
+			}
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(subject, "subject.save.error");
+		}
+
+		return result;
+	}
+
+	// Deleting
+	// -------------------------------------------------------------------------------------
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(final Subject subject, final BindingResult binding) {
+		ModelAndView result;
+
+		try {
+			this.subjectService.delete(subject);
+			//			this.activityRecordService.createDelete(subject);
+			ActivityRecord activityRecord = new ActivityRecord();
+			activityRecord.setDescription(actorService.findByPrincipal().getName() + " has delete/ha eliminado : " + subject.getTitle());
+			activityRecord.setActor(actorService.findByPrincipal());
+			activityRecordService.save(activityRecord);
+
+			result = new ModelAndView("redirect:/subject/list.do");
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(subject, "subject.delete.error");
+		}
+		return result;
+	}
+
+	// Ancilliary methods
+	// =================================================================================================
+
+	private ModelAndView createEditModelAndView(final Subject subject) {
+
+		return this.createEditModelAndView(subject, null);
+	}
+
+	private ModelAndView createEditModelAndView(final Subject subject, final String message) {
+
+		final ModelAndView resul = new ModelAndView("subject/edit");
+		Collection<Teacher> teachers = teacherService.findAll();
+
+		resul.addObject("subject", subject);
+		resul.addObject("message", message);
+		resul.addObject("teachers", teachers);
+
+		return resul;
+	}
+
+	private void error(final ModelAndView result, final int errorMessage) {
+		if (errorMessage != 0)
+			switch (errorMessage) {
+			case 2:
+				result.addObject("errorMessage", "subject.error.enrol");
+				break;
+			case 3:
+				result.addObject("errorMessage", "group.error.join");
+				break;
+			default:
+				result.addObject("errorMessage", "subject.errorDefault");
+				break;
+			}
+	}
+
+	// ============================NUEVOOOOOOOO=================================
+	// Add Subject
+	// ============================================================================
+
+	@RequestMapping(value = "/addTeacher", method = RequestMethod.GET)
+	public ModelAndView addTeacher(@RequestParam final int subjectId) {
+		ModelAndView result;
+		Collection<Teacher> teachers;
+		boolean addProperty;
+
+		addProperty = true;
+		teachers = this.teacherService.findAll();
+
+		result = new ModelAndView("teacher/list");
+		result.addObject("teachers", teachers);
+		result.addObject("requestURI", "teacher/list.do?subjectId=" + subjectId);
+		result.addObject("subjectId", subjectId);
+		result.addObject("addProperty", addProperty);
+
+		return result;
+
+	}
+
+}

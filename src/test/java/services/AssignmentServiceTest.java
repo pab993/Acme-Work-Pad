@@ -1,0 +1,205 @@
+
+package services;
+
+import java.util.Date;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import utilities.AbstractTest;
+import domain.Assignment;
+import domain.Subject;
+
+@Transactional
+@ContextConfiguration(locations = {
+	"classpath:spring/junit.xml"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class AssignmentServiceTest extends AbstractTest {
+
+	// The SUT
+	// ====================================================
+
+	@Autowired
+	private AssignmentService	assignmentService;
+
+	@Autowired
+	private SubjectService		subjectService;
+
+
+	// Tests
+	// ====================================================
+
+	/*
+	 * Create a new assignment.
+	 * 
+	 * En este caso de uso un teacher puede crear un assignment.
+	 */
+
+	public void assignmentCreateTest(final int subjectId, final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			final Subject subject = this.subjectService.findOne(subjectId);
+
+			final Assignment result = this.assignmentService.create(subject);
+
+			final Date startDate = new Date();
+			final Date finishDate = new Date();
+			finishDate.setYear(2018);
+
+			result.setTitle(title);
+			result.setDescription("description");
+			result.setStartDate(startDate);
+			result.setEndDate(finishDate);
+			result.setSubject(subject);
+			result.setInformation("information");
+
+			this.assignmentService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+	/*
+	 * Edit a new assignment.
+	 * 
+	 * En este caso de uso un teacher puede editar un assignment existente.
+	 */
+
+	public void editAssignmentTest(final String username, final String title, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			Assignment result;
+
+			result = this.assignmentService.findOne(20);
+
+			result.setTitle(title);
+
+			this.assignmentService.save(result);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	/*
+	 * Delete a assignment.
+	 * 
+	 * En este caso de uso un teacher puede borrar un assignment existente.
+	 */
+
+	public void deleteAssignmentTest(final String username, final Class<?> expected) {
+		Class<?> caught = null;
+
+		try {
+
+			this.authenticate(username);
+
+			final Assignment assignment = this.assignmentService.findOne(20);
+
+			this.assignmentService.delete(assignment);
+
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+
+			caught = oops.getClass();
+
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	// Drivers
+	// ===================================================
+
+	@Test
+	public void driverAssignmentCreateTest() {
+
+		final Object testingData[][] = {
+			// Crear una actividad estando logueado como teacher -> true
+			{
+				17, "teacher1", "assignment de prueba", null
+			},
+			// Crear una assignment sin estar logueado --> false
+			{
+				17, null, "assignment de prueba", IllegalArgumentException.class
+			},
+			// Crear una actividad logueado como student-> false
+			{
+				17, "student1", "assignment de prueba", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.assignmentCreateTest((int) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Class<?>) testingData[i][3]);
+
+	}
+
+	@Test
+	public void driverEditAssignmentTest() {
+
+		final Object testingData[][] = {
+			// Editar una assignment estando logueado como el teacher que imparte su asignatura correspondiente -> false
+			{
+				"teacher1", "assignment de prueba", null
+			},
+			// Editar un assignment sin estar logueado -> false
+			{
+				null, "assignment de prueba", IllegalArgumentException.class
+			},
+			// Editar un assignment logueado como student -> false
+			{
+				"student1", " assignment de prueba", IllegalArgumentException.class
+			},
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.editAssignmentTest((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	@Test
+	public void driverDeleteAssignmentTest() {
+
+		final Object testingData[][] = {
+			// Borrar un assignment estando logueado como teacher pero tiene deliverables-> true
+			{
+				"teacher1", null
+			},
+			// Borrar un assignment sin estar logueado -> false
+			{
+				null, IllegalArgumentException.class
+			},
+			// Borrar un assignment estando logueado como student -> false
+			{
+				"student1", IllegalArgumentException.class
+			},
+
+		};
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteAssignmentTest((String) testingData[i][0], (Class<?>) testingData[i][1]);
+	}
+
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+       
+<tiles-definitions>
+	
+	<definition name="subject/list" extends="master.page">	
+		<put-attribute name="title" value="Lista de asignaturas"/>
+		<put-attribute name="body" value="/views/subject/list.jsp" />
+	</definition>
+
+	<definition name="subject/listByTeacher" extends="master.page">	
+		<put-attribute name="title" value="Lista de asignaturas"/>
+		<put-attribute name="body" value="/views/subject/list.jsp" />
+	</definition>
+	
+	<definition name="subject/display" extends="master.page">	
+		<put-attribute name="title" value="Mostrar asignatura"/>
+		<put-attribute name="body" value="/views/subject/display.jsp" />
+	</definition>	
+	
+	<definition name="subject/edit" extends="master.page">	
+		<put-attribute name="title" value="Editar asignatura"/>
+		<put-attribute name="body" value="/views/subject/edit.jsp" />
+	</definition>
+	
+	<definition name="subject/search" extends="master.page" >
+		<put-attribute name="title" value="Buscar asignatura"/>
+		<put-attribute name="body" value="/views/subject/search.jsp"/>
+	</definition>
+	
+	<definition name="subject/searchWithSeats" extends="master.page" >
+		<put-attribute name="title" value="Buscar asignatura"/>
+		<put-attribute name="body" value="/views/subject/search.jsp"/>
+	</definition>
+
+	<definition name="subject/searchWithoutSeats" extends="master.page" >
+		<put-attribute name="title" value="Buscar asignatura"/>
+		<put-attribute name="body" value="/views/subject/search.jsp"/>
+	</definition>
+	
+	<definition name="subject/searchSeats" extends="master.page" >
+		<put-attribute name="title" value="Elige tu búsqueda"/>
+		<put-attribute name="body" value="/views/subject/searchSeats.jsp"/>
+	</definition>
+
+</tiles-definitions>

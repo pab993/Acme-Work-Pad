@@ -1,0 +1,177 @@
+
+package services;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import repositories.ActivityRecordRepository;
+import domain.ActivityRecord;
+import domain.Actor;
+
+@Service
+@Transactional
+public class ActivityRecordService {
+
+	//Managed Repository =============================================================================
+
+	@Autowired
+	private ActivityRecordRepository	activityRecordRepository;
+
+	@Autowired
+	private ActorService				actorService;
+
+	@Autowired
+	private AdministratorService		administratorService;
+
+	@Autowired
+	private SubjectService				subjectService;
+
+
+	//Services
+	// ===============================================================================================
+
+	//CRUDs Methods
+	//===============================================================================================
+
+	public ActivityRecord findOne(final int activityRecordId) {
+		ActivityRecord result;
+
+		result = this.activityRecordRepository.findOne(activityRecordId);
+
+		return result;
+	}
+
+	public Collection<ActivityRecord> findAll() {
+
+		Collection<ActivityRecord> result = new HashSet<ActivityRecord>();
+
+		result = this.activityRecordRepository.findAll();
+
+		return result;
+	}
+
+	public ActivityRecord create(final Actor actor) {
+		Assert.notNull(actor);
+		final Actor principal;
+		ActivityRecord result;
+		Date moment;
+
+		principal = this.actorService.findByPrincipal();
+		Assert.notNull(principal);
+		Assert.isTrue(principal.equals(actor));
+		Assert.isInstanceOf(Actor.class, principal);
+		moment = new Date(System.currentTimeMillis());
+
+		result = new ActivityRecord();
+		result.setActor(actor);
+		result.setMoment(moment);
+		//		administrator.getActivityRecords().add(result);
+
+		return result;
+	}
+
+	//	public ActivityRecord save(final ActivityRecord activityRecord) {
+	//		Assert.notNull(activityRecord);
+	//		ActivityRecord result;
+	//		final Actor principal = this.actorService.findByPrincipal();
+	//
+	//		Assert.isInstanceOf(Actor.class, principal);
+	//		Assert.notNull(principal);
+	//		Assert.isTrue(principal.equals(activityRecord.getActor()));
+	//		Assert.isInstanceOf(Actor.class, principal);
+	//
+	//		//		principal.getActivityRecords().add(activityRecord);
+	//
+	//		result = this.activityRecordRepository.save(activityRecord);
+	//
+	//		return result;
+	//	}
+
+	public void delete(final ActivityRecord activityRecord) {
+		Assert.notNull(activityRecord);
+		Actor principal;
+
+		principal = this.actorService.findByPrincipal();
+		Assert.notNull(principal);
+		Assert.isTrue(principal.equals(activityRecord.getActor()));
+		Assert.isInstanceOf(Actor.class, principal);
+		//		Assert.isTrue(principal.getActivityRecords().contains(activityRecord));
+
+		this.activityRecordRepository.delete(activityRecord);
+
+	}
+
+	//	==========
+	//	NUEVOOOO
+	//	=========
+
+	//	public ActivityRecord create(final Subject subject) {
+	//		Actor principal;
+	//		principal = this.administratorService.findByPrincipal();
+	//		Assert.isInstanceOf(Administrator.class, principal);
+	//
+	//		final ActivityRecord result;
+	//		final Collection<String> attachments = new HashSet<String>();
+	//		final ActivityRecord activityRecord = new ActivityRecord();
+	//		activityRecord.setMoment(new Date(System.currentTimeMillis() - 1));
+	////		activityRecord.setDescription("kjkjkj");
+	//		activityRecord.setAttachments(attachments);
+	//		activityRecord.setActor(principal);
+	//
+	////		this.subjectService.save(subject);
+	//
+	//		result = this.save(activityRecord);
+	//
+	//		return result;
+	//	}
+	//
+	//	public ActivityRecord createDelete(final Subject subject) {
+	//		Actor principal;
+	//		principal = this.administratorService.findByPrincipal();
+	//		Assert.isInstanceOf(Administrator.class, principal);
+	//
+	//		final ActivityRecord result;
+	//		final Collection<String> attachments = new HashSet<String>();
+	//		final ActivityRecord activityRecord = new ActivityRecord();
+	//		activityRecord.setMoment(new Date(System.currentTimeMillis() - 1));
+	//		activityRecord.setDescription("kjkjkj");
+	//		activityRecord.setAttachments(attachments);
+	//		activityRecord.setActor(principal);
+	//
+	//		result = this.save(activityRecord);
+	//
+	//		return result;
+	//	}
+
+	public ActivityRecord save(ActivityRecord activityRecord) {
+		Assert.notNull(activityRecord);
+		final Collection<String> attachments = new HashSet<String>();
+
+		activityRecord.setMoment(new Date(System.currentTimeMillis() - 1));
+		activityRecord.setAttachments(attachments);
+
+		return activityRecordRepository.save(activityRecord);
+	}
+
+	//Other Business Methods =========================================================================
+
+	public Collection<ActivityRecord> findAllByActor(final int actorId) {
+
+		Collection<ActivityRecord> result;
+		Actor actor;
+
+		actor = this.actorService.findByPrincipal();
+		Assert.notNull(actor);
+
+		result = this.activityRecordRepository.findAllByActor(actorId);
+
+		return result;
+	}
+
+}
